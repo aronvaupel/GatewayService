@@ -1,1 +1,1 @@
-rootProject.name = "gateway"
+rootProject.name = "gateway-service"

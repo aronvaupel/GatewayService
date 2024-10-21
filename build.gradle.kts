@@ -14,14 +14,42 @@ java {
 	}
 }
 
+fun loadEnv(): Map<String, String> {
+	val envFile = file("${rootProject.projectDir}/.env")
+	if (!envFile.exists()) {
+		throw GradleException(".env file not found")
+	}
+
+	return envFile.readLines()
+		.filter { it.isNotBlank() && !it.startsWith("#") }
+		.map { it.split("=", limit = 2) }
+		.associate { it[0] to it.getOrElse(1) { "" } }
+}
+
+extra["springCloudVersion"] = "2023.0.3"
+
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://maven.pkg.github.com/aronvaupel/Commons")
+		credentials {
+			val env = loadEnv()
+			username = env["GITHUB_USERNAME"] ?: ""
+			password = env["GITHUB_TOKEN"] ?: ""
+		}
+	}
+	maven {
+		url = uri("https://repo.spring.io/milestone")
+	}
+	maven {
+		url = uri("https://repo.spring.io/snapshot")
+	}
 }
 
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:1.1.7")
+	implementation("com.github.aronvaupel:commons:1.2.0")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")

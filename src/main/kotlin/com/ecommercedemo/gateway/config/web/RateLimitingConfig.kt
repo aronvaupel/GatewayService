@@ -1,6 +1,6 @@
 package com.ecommercedemo.gateway.config.web
 
-import com.ecommercedemo.userservice.config.env.EnvironmentConfig
+import com.ecommercedemo.gateway.config.env.EnvironmentConfig
 import com.ecommercedemo.userservice.validation.userrole.UserRole
 import io.github.cdimascio.dotenv.Dotenv
 import io.jsonwebtoken.Jwts
