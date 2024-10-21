@@ -120,7 +120,7 @@ services:
       POSTGRES_DB: UserServiceDb
       POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
       POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-    container_name: postgresql-userservice
+    container_name: postgresql_user-service
     ports:
       - "5432:5432"
     networks:
