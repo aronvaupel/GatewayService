@@ -14,10 +14,10 @@ RUN git clone --depth 1 https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/ar
 WORKDIR /home/gradle/src
 
 # Ensure necessary Gradle wrapper and files have execution permissions
-RUN chmod +x gradlew
+RUN chmod +x gradle
 
 # Build the project
-RUN ./gradlew clean build --no-daemon
+RUN ./gradle clean build --no-daemon
 
 # Stage 2: Create a smaller image for running the application
 FROM eclipse-temurin:21-jdk-alpine
