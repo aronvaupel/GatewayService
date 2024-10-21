@@ -65,7 +65,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/UserServiceDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql_user-service:5432/UserServiceDB
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       SPRING_DATA_REDIS_HOST: redis
@@ -114,7 +114,7 @@ services:
       timeout: 10s
       retries: 5
 
-  postgresql-userservice:
+  postgresql_user-service:
     image: postgres:latest
     environment:
       POSTGRES_DB: UserServiceDb
