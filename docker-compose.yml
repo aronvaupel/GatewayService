@@ -8,7 +8,7 @@ services:
   gateway-service:
     image: gateway-service:latest
     build:
-      context: .
+      context: ./gateway-service
       dockerfile: Dockerfile
       args:
         GITHUB_USERNAME: ${GITHUB_USERNAME}
@@ -37,7 +37,7 @@ services:
   eureka-service:
     image: eureka-service:latest
     build:
-      context: .
+      context: ./eureka-service
       dockerfile: Dockerfile
       args:
         GITHUB_USERNAME: ${GITHUB_USERNAME}
@@ -56,7 +56,7 @@ services:
   user-service:
     image: user-service:latest
     build:
-      context: .
+      context: ./user-service
       dockerfile: Dockerfile
       args:
         GITHUB_USERNAME: ${GITHUB_USERNAME}
