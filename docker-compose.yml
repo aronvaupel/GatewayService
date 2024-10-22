@@ -149,17 +149,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
-  mark-registration-complete:
-    image: redis:latest
-    container_name: mark-registration-complete
-    depends_on:
-      - redis
-      - kafka
-      - zookeeper
-      - user-service
-    volumes:
-      - ./scripts:/scripts
-    networks:
-      - microservices-network
-    entrypoint: [ "sh", "/scripts/mark-kafka-topic-names-complete.sh" ]
