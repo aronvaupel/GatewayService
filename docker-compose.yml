@@ -37,7 +37,7 @@ services:
   eureka-service:
     image: eureka-service:latest
     build:
-      context: ../eureka-service
+      context: ../EurekaService
       dockerfile: Dockerfile
       args:
         GITHUB_USERNAME: ${GITHUB_USERNAME}
