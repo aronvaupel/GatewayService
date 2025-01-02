@@ -1,6 +1,6 @@
 package com.ecommercedemo.gateway.service
 
-import com.ecommercedemo.common.redis.RedisService
+import com.ecommercedemo.common.application.cache.RedisService
 import com.netflix.appinfo.InstanceInfo
 import com.netflix.discovery.EurekaClient
 import org.springframework.scheduling.annotation.Scheduled

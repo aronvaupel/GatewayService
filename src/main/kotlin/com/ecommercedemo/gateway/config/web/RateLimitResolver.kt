@@ -1,6 +1,6 @@
 package com.ecommercedemo.gateway.config.web
 
-import com.ecommercedemo.userservice.validation.userrole.UserRole
+import com.ecommercedemo.common.application.validation.userrole.UserRole
 import org.springframework.stereotype.Component
 
 @Component
