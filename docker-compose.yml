@@ -2,7 +2,7 @@ version: '3.8'
 
 networks:
   microservices-network:
-    external: true
+    driver: bridge
 
 services:
   gateway-service:
