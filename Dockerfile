@@ -9,7 +9,7 @@ ARG GITHUB_TOKEN
 RUN apt-get update && apt-get install -y git
 
 # Clone the repository using GitHub credentials with shallow clone (--depth 1)
-RUN git clone --depth 1 https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/aronvaupel/GatewayService.git /home/gradle/src
+RUN git clone --depth 1 https://github.com/aronvaupel/GatewayService.git /home/gradle/src
 
 WORKDIR /home/gradle/src
 
@@ -17,7 +17,9 @@ WORKDIR /home/gradle/src
 RUN chmod +x gradlew
 
 # Build the project
-RUN ./gradlew clean build --no-daemon
+RUN ./gradlew clean build --no-daemon \
+    -PgithubUsername=${GITHUB_USERNAME} \
+    -PgithubToken=${GITHUB_TOKEN}
 
 # Stage 2: Create a smaller image for running the application
 FROM eclipse-temurin:21-jdk-alpine

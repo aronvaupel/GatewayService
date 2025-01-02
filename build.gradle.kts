@@ -26,6 +26,9 @@ fun loadEnv(): Map<String, String> {
 		.associate { it[0] to it.getOrElse(1) { "" } }
 }
 
+val githubUsername: String? = System.getenv("GITHUB_USERNAME") ?: project.findProperty("githubUsername") as String?
+val githubToken: String? = System.getenv("GITHUB_TOKEN") ?: project.findProperty("githubToken") as String?
+
 extra["springCloudVersion"] = "2023.0.3"
 
 repositories {
@@ -33,9 +36,8 @@ repositories {
 	maven {
 		url = uri("https://maven.pkg.github.com/aronvaupel/Commons")
 		credentials {
-			val env = loadEnv()
-			username = env["GITHUB_USERNAME"] ?: ""
-			password = env["GITHUB_TOKEN"] ?: ""
+			username = githubUsername ?: throw GradleException("GitHub username not provided")
+			password = githubToken ?: throw GradleException("GitHub token not provided")
 		}
 	}
 	maven {
