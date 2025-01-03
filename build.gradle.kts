@@ -54,6 +54,10 @@ extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
 	implementation("com.github.aronvaupel:commons:6.4.8")
+	{
+		exclude(group = "org.springframework.data", module = "spring-data-jpa")
+		exclude(group = "jakarta.persistence", module = "jakarta.persistence-api")
+	}
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
