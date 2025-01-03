@@ -68,7 +68,7 @@ dependencies {
 	implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.15.2")
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.4")
 }
 
 dependencyManagement {
