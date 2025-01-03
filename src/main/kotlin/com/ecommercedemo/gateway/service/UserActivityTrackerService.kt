@@ -1,5 +1,6 @@
 package com.ecommercedemo.gateway.service
 
+import org.springframework.context.annotation.DependsOn
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -9,6 +10,7 @@ import java.util.*
 
 
 @Service
+@DependsOn("redisTemplate")
 class UserActivityTrackerService(
     private val redisTemplate: RedisTemplate<String, Any>
 ) {
