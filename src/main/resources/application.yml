@@ -38,3 +38,7 @@ eureka:
 github:
   username: ${GITHUB_USERNAME}
   token: ${GITHUB_TOKEN}
+
+cache:
+  memory:
+    maxSize: 1000000000
