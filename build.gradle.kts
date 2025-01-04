@@ -26,10 +26,8 @@ fun loadEnv(): Map<String, String> {
 		.associate { it[0] to it.getOrElse(1) { "" } }
 }
 
-val env = loadEnv()
-
-val githubUsername: String? = project.findProperty("githubUsername") as String? ?: System.getenv("GITHUB_USERNAME") ?: env["GITHUB_USERNAME"]
-val githubToken: String? = project.findProperty("githubToken") as String? ?: System.getenv("GITHUB_TOKEN") ?: env["GITHUB_TOKEN"]
+val githubUsername: String? = project.findProperty("githubUsername") as String? ?: System.getenv("GITHUB_USERNAME") ?: loadEnv()["GITHUB_USERNAME"]
+val githubToken: String? = project.findProperty("githubToken") as String? ?: System.getenv("GITHUB_TOKEN") ?: loadEnv()["GITHUB_TOKEN"]
 
 extra["springCloudVersion"] = "2023.0.3"
 
