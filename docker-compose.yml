@@ -128,15 +128,15 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: UserServiceDB
-      POSTGRES_USER: ${SPRING_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      POSTGRES_USER: ${USERSERVICE_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${USERSERVICE_DATASOURCE_PASSWORD}
     container_name: postgresql_user-service
     ports:
       - "5432:5432"
     networks:
       - microservices-network
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${SPRING_DATASOURCE_USERNAME} -d UserServiceDB || exit 1" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${USERSERVICE_DATASOURCE_USERNAME} -d UserServiceDB || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 5
