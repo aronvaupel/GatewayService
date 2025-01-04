@@ -52,3 +52,7 @@ github:
 cache:
   memory:
     maxSize: 1000000000
+
+security:
+  jwt:
+    secret: secret

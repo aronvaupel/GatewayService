@@ -1,12 +1,12 @@
 package com.ecommercedemo.gateway.config.web
 
 import com.ecommercedemo.common.application.validation.userrole.UserRole
-import com.ecommercedemo.gateway.config.env.EnvironmentConfig
 import io.github.cdimascio.dotenv.Dotenv
 import io.jsonwebtoken.Jwts
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.core.RedisTemplate
@@ -18,12 +18,11 @@ import java.util.concurrent.TimeUnit
 @Configuration
 class RateLimitingConfig @Autowired constructor(
     private val rateLimitResolver: RateLimitResolver,
-    envConfig: EnvironmentConfig,
     private val redisTemplate: RedisTemplate<String, String>
 ) {
 
-    private val dotenv: Dotenv? = if (envConfig.isLocalEnv) Dotenv.load() else null
-    private val jwtSecret = dotenv?.get("JWT_SECRET") ?: System.getenv("JWT_SECRET")
+    @Value("\${security.jwt.secret}")
+    private lateinit var jwtSecret: String
 
     @Bean
     fun rateLimitingInterceptor(): HandlerInterceptor {

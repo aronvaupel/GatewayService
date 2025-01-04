@@ -7,21 +7,21 @@ import org.springframework.beans.factory.annotation.Value
 import java.util.*
 
 object JwtUtil {
-    @Value("\${jwt.secret}")
-    private lateinit var secretKey: String
+    @Value("\${security.jwt.secret}")
+    private lateinit var jwtSecret: String
 
     fun generateToken(username: String, expiration: Long): String {
         return Jwts.builder()
             .setSubject(username)
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(SignatureAlgorithm.HS256, jwtSecret)
             .compact()
     }
 
     fun validateToken(token: String): Boolean {
         return try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token)
             true
         } catch (e: Exception) {
             false
@@ -29,12 +29,12 @@ object JwtUtil {
     }
 
     fun getUsernameFromToken(token: String): String {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).body.subject
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).body.subject
     }
 
-    private fun getClaimsFromToken(token: String): Claims {
+    fun getClaimsFromToken(token: String): Claims {
         return Jwts.parser()
-            .setSigningKey(secretKey)
+            .setSigningKey(jwtSecret)
             .parseClaimsJws(token)
             .body
     }

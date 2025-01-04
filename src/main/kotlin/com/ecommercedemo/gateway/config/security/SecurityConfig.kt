@@ -11,11 +11,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@ComponentScan(basePackages = ["com.ecommercedemo.common.security"])
-open class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
+class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
 
     @Bean
-    open fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf { it.disable() }
             .authorizeHttpRequests { authz ->
                 authz
@@ -23,7 +22,7 @@ open class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
                     .anyRequest().authenticated()
             }
             .sessionManagement { session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) // No session will be created or used by Spring Security
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
