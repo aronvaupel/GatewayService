@@ -95,7 +95,7 @@ services:
       args:
         GITHUB_USERNAME: ${GITHUB_USERNAME}
         GITHUB_TOKEN: ${GITHUB_TOKEN}
-    container_name: user-service
+    container_name: pseudoproperty-service
     ports:
       - "8081:8081"
     environment:
