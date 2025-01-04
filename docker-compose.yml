@@ -89,6 +89,38 @@ services:
       timeout: 10s
       retries: 5
 
+  pseudoproperty-service:
+    image: pseudoproperty-service:latest
+    build:
+      context: ../pseudoproperty-service
+      dockerfile: Dockerfile
+      args:
+        GITHUB_USERNAME: ${GITHUB_USERNAME}
+        GITHUB_TOKEN: ${GITHUB_TOKEN}
+    container_name: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      PSEUDOPROPERTYSERVICE_DATASOURCE_URL: jdbc:postgresql://postgresql_user-service:5432/PseudopropertyServiceDB
+      PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME: ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME}
+      PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD: ${PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      - eureka-service
+      - kafka
+      - zookeeper
+      - redis
+      - postgresql_pseudoproperty-service
+    networks:
+      - microservices-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   kafka:
     image: confluentinc/cp-kafka:latest
     depends_on:
@@ -137,6 +169,23 @@ services:
       - microservices-network
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${USERSERVICE_DATASOURCE_USERNAME} -d UserServiceDB || exit 1" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  postgresql_pseudoproperty-service:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: PseudopropertyServiceDB
+      POSTGRES_USER: ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD}
+    container_name: postgresql_user-service
+    ports:
+      - "5434:5432"
+    networks:
+      - microservices-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME} -d PseudopropertyServiceDB || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 5
