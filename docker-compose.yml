@@ -97,7 +97,7 @@ services:
         GITHUB_TOKEN: ${GITHUB_TOKEN}
     container_name: pseudoproperty-service
     ports:
-      - "8081:8081"
+      - "8082:8082"
     environment:
       PSEUDOPROPERTYSERVICE_DATASOURCE_URL: jdbc:postgresql://postgresql_user-service:5432/PseudopropertyServiceDB
       PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME: ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME}
