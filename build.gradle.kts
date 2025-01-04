@@ -53,14 +53,13 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:6.4.10")
-	{
-		exclude(group = "org.springframework.data", module = "spring-data-jpa")
-		exclude(group = "jakarta.persistence", module = "jakarta.persistence-api")
-	}
+	implementation("com.github.aronvaupel:commons:6.4.11")
+	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
+	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.cloud:spring-cloud-starter-gateway-mvc")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

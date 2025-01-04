@@ -1,10 +1,6 @@
 spring:
   main:
     allow-bean-definition-overriding: true
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   application:
     name: gateway-service
   cloud:
@@ -14,13 +10,27 @@ spring:
           uri: lb://USERSERVICE
           predicates:
             - Path=/userservice/**
-        - id: emailservice-route
-          uri: lb://EMAILSERVICE
-          predicates:
-            - Path=/emailservice/**
 
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  datasource:
+    url: ${GATEWAYSERVICE_DATASOURCE_URL}
+    username: ${GATEWAYSERVICE_DATASOURCE_USERNAME}
+    password: ${GATEWAYSERVICE_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+      types:
+        registration: hypersistence-utils
+        json-dialect: true
+    show-sql: false
+    properties:
+      '[hypersistence.utils.enable_types_contributor]': false
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 
   data:
     redis:
