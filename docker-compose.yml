@@ -16,8 +16,8 @@ services:
       - "8080:8080"
     environment:
       GATEWAYSERVICE_DATASOURCE_URL: jdbc:postgresql://postgresql_gateway-service:5432/GatewayServiceDB
-      GATEWAYSERVICE_DATASOURCE_USERNAME: ${GATEWAYSERVICE_DATASOURCE_USERNAME}
-      GATEWAYSERVICE_DATASOURCE_PASSWORD: ${GATEWAYSERVICE_DATASOURCE_PASSWORD}
+      GATEWAYSERVICE_DATASOURCE_USERNAME: username
+      GATEWAYSERVICE_DATASOURCE_PASSWORD: password
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
       SPRING_PROFILES_ACTIVE: default
       SPRING_DATA_REDIS_HOST: redis
@@ -68,8 +68,8 @@ services:
       - "8081:8081"
     environment:
       USERSERVICE_DATASOURCE_URL: jdbc:postgresql://postgresql_user-service:5432/UserServiceDB
-      USERSERVICE_DATASOURCE_USERNAME: ${USERSERVICE_DATASOURCE_USERNAME}
-      USERSERVICE_DATASOURCE_PASSWORD: ${USERSERVICE_DATASOURCE_PASSWORD}
+      USERSERVICE_DATASOURCE_USERNAME: username
+      USERSERVICE_DATASOURCE_PASSWORD: password
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -100,8 +100,8 @@ services:
       - "8082:8082"
     environment:
       PSEUDOPROPERTYSERVICE_DATASOURCE_URL: jdbc:postgresql://postgresql_user-service:5432/PseudopropertyServiceDB
-      PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME: ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME}
-      PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD: ${PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD}
+      PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME: username
+      PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD: password
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
@@ -158,8 +158,8 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: UserServiceDB
-      POSTGRES_USER: ${USERSERVICE_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${USERSERVICE_DATASOURCE_PASSWORD}
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
     container_name: postgresql_user-service
     ports:
       - "5432:5432"
@@ -175,8 +175,8 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: PseudopropertyServiceDB
-      POSTGRES_USER: ${PSEUDOPROPERTYSERVICE_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${PSEUDOPROPERTYSERVICE_DATASOURCE_PASSWORD}
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
     container_name: postgresql_pseudoproperty-service
     ports:
       - "5434:5432"
@@ -192,8 +192,8 @@ services:
     image: postgres:latest
     environment:
       POSTGRES_DB: GatewayServiceDB
-      POSTGRES_USER: ${GATEWAYSERVICE_DATASOURCE_USERNAME}
-      POSTGRES_PASSWORD: ${GATEWAYSERVICE_DATASOURCE_PASSWORD}
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
     container_name: postgresql_gateway-service
     ports:
       - "5433:5432"

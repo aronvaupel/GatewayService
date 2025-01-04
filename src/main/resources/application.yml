@@ -12,11 +12,11 @@ spring:
             - Path=/userservice/**
 
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    bootstrap-servers: kafka:9092
   datasource:
-    url: ${GATEWAYSERVICE_DATASOURCE_URL}
-    username: ${GATEWAYSERVICE_DATASOURCE_USERNAME}
-    password: ${GATEWAYSERVICE_DATASOURCE_PASSWORD}
+    url: jdbc:postgresql://postgresql_user-service:5432/GatewayServiceDB
+    username: username
+    password: password
   jpa:
     hibernate:
       ddl-auto: update
@@ -34,8 +34,8 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: redis
+      port: 6379
 
   profiles:
     active: default
