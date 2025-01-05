@@ -52,7 +52,7 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:6.5.8")
+	implementation("com.github.aronvaupel:commons:6.5.9")
 	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
 	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
