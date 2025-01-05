@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 
 @SpringBootApplication
 @ComponentScan("com.ecommercedemo.gateway", "com.ecommercedemo.common")
-@EntityScan(basePackages = ["com.ecommercedemo.gateway"])
+@EntityScan(basePackages = ["com.ecommercedemo.gateway", "com.ecommercedemo.common"])
 @EnableJpaRepositories(basePackages = ["com.ecommercedemo.gateway.persistence", "com.ecommercedemo.common.persistence"])
 class GatewayApplication
 
