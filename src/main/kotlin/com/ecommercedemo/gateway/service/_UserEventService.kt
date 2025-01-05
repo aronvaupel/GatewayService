@@ -10,5 +10,4 @@ import org.springframework.stereotype.Service
 @Suppress("ClassName")
 @Service
 @EventServiceFor(_User::class)
-@ConditionalOnClass(name = ["org.springframework.data.jpa.repository.JpaRepository"])
 class _UserEventService : EventServiceTemplate<_User>()

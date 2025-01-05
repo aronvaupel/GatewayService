@@ -10,6 +10,5 @@ import org.springframework.stereotype.Service
 @Transactional
 @Service
 @RestServiceFor(_User::class)
-@ConditionalOnClass(name = ["org.springframework.data.jpa.repository.JpaRepository"])
 @Suppress("ClassName")
 class _UserRestService : DownstreamRestServiceTemplate<_User>()
