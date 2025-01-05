@@ -14,7 +14,7 @@ spring:
   kafka:
     bootstrap-servers: kafka:9092
   datasource:
-    url: jdbc:postgresql://postgresql_user-service:5432/GatewayServiceDB
+    url: jdbc:postgresql://postgresql_gateway-service:5432/GatewayServiceDB
     username: username
     password: password
   jpa:
