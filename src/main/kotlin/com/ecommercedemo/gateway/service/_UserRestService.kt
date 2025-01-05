@@ -7,7 +7,7 @@ import jakarta.transaction.Transactional
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.stereotype.Service
 
-@Transactional
+
 @Service
 @RestServiceFor(_User::class)
 @Suppress("ClassName")
