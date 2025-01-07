@@ -11,18 +11,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @ComponentScan(
     basePackages = ["com.ecommercedemo.gateway", "com.ecommercedemo.common"], excludeFilters = [ComponentScan.Filter(
         type = FilterType.REGEX,
-        pattern = ["com\\.ecommercedemo\\.common\\.model\\.concretion\\._pseudoProperty\\..*",
+        pattern = [
+            "com\\.ecommercedemo\\.common\\.model\\.concretion\\._pseudoProperty\\..*",
             "com\\.ecommercedemo\\.common\\.model\\.concretion\\.permission\\..*",
             "com\\.ecommercedemo\\.common\\.model\\.concretion\\.permissionuserassociation\\..*"
         ]
     )]
 )
 @EntityScan("com.ecommercedemo.gateway")
-@EnableJpaRepositories(
-    basePackages = ["com.ecommercedemo.gateway.persistence"], excludeFilters = [ComponentScan.Filter(
-        type = FilterType.REGEX, pattern = ["com\\.ecommercedemo\\.common\\.persistence\\..*"]
-    )]
-)
+@EnableJpaRepositories(basePackages = ["com.ecommercedemo.gateway.persistence"])
 class GatewayApplication
 
 fun main(args: Array<String>) {
