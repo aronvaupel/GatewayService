@@ -1,4 +1,4 @@
-package com.ecommercedemo.gateway.model
+package com.ecommercedemo.gateway.model._user
 
 import com.ecommercedemo.common.application.validation.password.PasswordCrypto
 import com.ecommercedemo.common.application.validation.password.PasswordValidator

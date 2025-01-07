@@ -2,8 +2,7 @@ package com.ecommercedemo.gateway.service
 
 import com.ecommercedemo.common.service.abstraction.EventServiceTemplate
 import com.ecommercedemo.common.service.annotation.EventServiceFor
-import com.ecommercedemo.gateway.model._User
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
+import com.ecommercedemo.gateway.model._user._User
 import org.springframework.stereotype.Service
 
 
