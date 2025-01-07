@@ -56,5 +56,3 @@ cache:
 security:
   jwt:
     secret: secret
-
-pseudo-properties: true
