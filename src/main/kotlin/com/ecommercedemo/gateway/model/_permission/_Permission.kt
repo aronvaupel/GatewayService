@@ -6,7 +6,7 @@ import jakarta.persistence.Entity
 @Entity
 @Suppress("ClassName")
 open class _Permission(
-    var serviceOfOrigin: String = "",
-    var label: String = "",
-    var description: String = ""
+    open var serviceOfOrigin: String = "",
+    open var label: String = "",
+    open var description: String = ""
 ) : BaseEntity()
