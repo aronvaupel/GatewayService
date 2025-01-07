@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 	basePackages = ["com.ecommercedemo.gateway.persistence"],
 	excludeFilters = [ComponentScan.Filter(
 		type = FilterType.REGEX,
-		pattern = ["com\\.ecommercedemo\\.common\\persistence\\..*"]
+		pattern = ["com\\.ecommercedemo\\.common\\.persistence\\..*"]
 	)]
 )
 class GatewayApplication
