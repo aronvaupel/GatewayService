@@ -13,6 +13,8 @@ spring:
 
   kafka:
     bootstrap-servers: kafka:9092
+    consumer:
+      auto-offset-reset: earliest
   datasource:
     url: jdbc:postgresql://postgresql_gateway-service:5432/GatewayServiceDB
     username: username
