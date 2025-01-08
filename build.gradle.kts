@@ -72,6 +72,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.15.2")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.4")
 	implementation("org.postgresql:postgresql:42.7.2")
+	implementation("org.springframework.kafka:spring-kafka")
 }
 
 dependencyManagement {
