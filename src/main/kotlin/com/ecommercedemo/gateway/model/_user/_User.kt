@@ -8,6 +8,7 @@ import com.ecommercedemo.common.model.abstraction.AugmentableBaseEntity
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
+import java.util.*
 
 @Entity
 @Table(name = "_users")
@@ -22,7 +23,15 @@ open class _User(
     private var _password: String = "",
 
     @Enumerated(EnumType.ORDINAL)
-    open var userRole: UserRole = UserRole.GUEST
+    open var userRole: UserRole = UserRole.GUEST,
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+        name = "user_permissions",
+        joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")]
+    )
+    @Column(name = "permission_id", nullable = false)
+    open var permissions: List<UUID> = listOf(),
 ) : AugmentableBaseEntity() {
     open var password: String
         get() = _password
