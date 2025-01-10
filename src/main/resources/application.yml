@@ -59,8 +59,9 @@ security:
   jwt:
     secret: secret
 
-#logging:
-#  level:
-#    org.springframework.data: DEBUG
-#    org.springframework.context.annotation: DEBUG
-#    org.springframework.boot.autoconfigure: DEBUG
+logging:
+  level:
+    org.springframework.data: Info
+    org.springframework.context.annotation: WARN
+    org.springframework.boot.autoconfigure: WARN
+    org.apache.kafka: WARN
