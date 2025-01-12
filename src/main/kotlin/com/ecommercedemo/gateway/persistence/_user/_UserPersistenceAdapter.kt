@@ -8,4 +8,10 @@ import org.springframework.stereotype.Service
 @Service
 @PersistenceAdapterFor(_User::class)
 @Suppress("ClassName")
-class _UserPersistenceAdapter : EntityPersistenceAdapter<_User>()
+class _UserPersistenceAdapter(
+    private val repository: _UserRepository
+) : EntityPersistenceAdapter<_User>() {
+    fun getByUsernameAndPassword(username: String, password: String): _User? {
+        return repository.findByUsernameAndPassword(username, password)
+    }
+}

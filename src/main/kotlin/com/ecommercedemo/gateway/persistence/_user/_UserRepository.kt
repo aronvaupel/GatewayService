@@ -6,4 +6,6 @@ import java.util.*
 
 
 @Suppress("ClassName", "unused")
-interface _UserRepository : EntityRepository<_User, UUID>
+interface _UserRepository : EntityRepository<_User, UUID> {
+    fun findByUsernameAndPassword(username: String, password: String): _User?
+}

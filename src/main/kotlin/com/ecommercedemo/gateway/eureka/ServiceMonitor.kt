@@ -1,4 +1,4 @@
-package com.ecommercedemo.gateway.service
+package com.ecommercedemo.gateway.eureka
 
 import com.ecommercedemo.common.application.cache.RedisService
 import com.netflix.appinfo.InstanceInfo

@@ -1,0 +1,74 @@
+package com.ecommercedemo.gateway.service
+
+import com.ecommercedemo.common.application.validation.password.PasswordCrypto
+import com.ecommercedemo.common.application.validation.userrole.UserRole
+import com.ecommercedemo.gateway.config.exception.AuthenticationFailureException
+import com.ecommercedemo.gateway.config.security.JwtUtil
+import jakarta.servlet.http.Cookie
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
+import java.util.*
+
+@Service
+class AuthService(
+    @Value("\${security.jwt.access.expiration}")
+    private val accessExpiration: Long,
+    @Value("\${security.jwt.refresh.expiration}")
+    private val refreshExpiration: Long,
+    private val _userService: _UserRestService,
+    private val _permissionService: _PermissionRestService
+) {
+    fun authenticate(username: String, password: String): Triple<String, String, UUID> {
+        val encodedPassword = PasswordCrypto.hashPassword(password)
+        val user = _userService.getByUsernameAndPassword(username, encodedPassword)
+            ?: throw AuthenticationFailureException()
+
+        val permissions = _permissionService.getMultiple(user.permissions, 0, 1000).map { it.label }.toList()
+        val accessToken = JwtUtil.generateToken(
+            username, user.id, user.userRole, permissions, accessExpiration
+        )
+        val refreshToken = JwtUtil.generateToken(
+            username, user.id, user.userRole, permissions, refreshExpiration
+        )
+        return Triple(accessToken, refreshToken, user.id)
+    }
+
+    fun refreshToken(refreshToken: String): Pair<String, String?> {
+        if (!JwtUtil.validateToken(refreshToken)) {
+            throw AuthenticationFailureException()
+        }
+        val claims = JwtUtil.getClaimsFromToken(refreshToken)
+        val username = claims.subject
+        val userId = UUID.fromString(claims["id"].toString())
+        val role = UserRole.valueOf(claims["role"].toString())
+        val permissions = (claims["permissions"] as List<*>).map { it.toString() }
+
+        val newAccessToken = JwtUtil.generateToken(username, userId, role, permissions, accessExpiration)
+        val newRefreshToken = if (JwtUtil.isExpiringSoon(refreshToken)) {
+            JwtUtil.generateToken(username, userId, role, permissions, refreshExpiration)
+        } else null
+        return Pair(newAccessToken, newRefreshToken)
+    }
+
+    fun loginAsGuest(): Triple<String, String, UUID> {
+        val guestId = UUID.randomUUID()
+        val accessToken = JwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), accessExpiration)
+        val refreshToken = JwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), refreshExpiration)
+        return Triple(accessToken, refreshToken, guestId)
+    }
+
+    fun logout(response: HttpServletResponse) {
+        response.addCookie(Cookie("refreshToken", "").apply {
+            isHttpOnly = true
+            maxAge = 0
+        })
+    }
+
+    fun createRefreshCookie(token: String): Cookie {
+        return Cookie("refreshToken", token).apply {
+            isHttpOnly = true
+            maxAge = refreshExpiration.toInt() / 1000
+        }
+    }
+}

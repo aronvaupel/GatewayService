@@ -3,13 +3,6 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: gateway-service
-  cloud:
-    gateway:
-      routes:
-        - id: userservice-route
-          uri: lb://USERSERVICE
-          predicates:
-            - Path=/userservice/**
 
   kafka:
     bootstrap-servers: kafka:9092
@@ -58,6 +51,8 @@ cache:
 security:
   jwt:
     secret: secret
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
 
 logging:
   level:
