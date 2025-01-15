@@ -52,7 +52,7 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:7.1.0")
+	implementation("com.github.aronvaupel:commons:7.1.1")
 	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
 	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -73,6 +73,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.4")
 	implementation("org.postgresql:postgresql:42.7.2")
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
 }
 
 dependencyManagement {

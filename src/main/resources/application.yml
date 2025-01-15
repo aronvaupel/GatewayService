@@ -51,8 +51,10 @@ cache:
 security:
   jwt:
     secret: secret
-    access-token-expiration: 900000
-    refresh-token-expiration: 604800000
+    access:
+      expiration: 900000
+    refresh:
+      expiration: 604800000
 
 logging:
   level:

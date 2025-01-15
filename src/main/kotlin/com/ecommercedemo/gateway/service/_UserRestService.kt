@@ -16,4 +16,7 @@ class _UserRestService(
     fun getByUsernameAndPassword(username: String, password: String): _User? {
         return adapter.getByUsernameAndPassword(username, password)
     }
+    fun getSuperAdminCount(): Int {
+        return adapter.getSuperAdminCount()
+    }
 }

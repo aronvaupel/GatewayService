@@ -1,5 +1,6 @@
 package com.ecommercedemo.gateway.persistence._user
 
+import com.ecommercedemo.common.application.validation.userrole.UserRole
 import com.ecommercedemo.common.persistence.abstraction.EntityPersistenceAdapter
 import com.ecommercedemo.common.persistence.annotation.PersistenceAdapterFor
 import com.ecommercedemo.gateway.model._user._User
@@ -13,5 +14,9 @@ class _UserPersistenceAdapter(
 ) : EntityPersistenceAdapter<_User>() {
     fun getByUsernameAndPassword(username: String, password: String): _User? {
         return repository.findByUsernameAndPassword(username, password)
+    }
+
+    fun getSuperAdminCount(): Int {
+        return repository.countByUserRoleIs(UserRole.SUPER_ADMIN)
     }
 }

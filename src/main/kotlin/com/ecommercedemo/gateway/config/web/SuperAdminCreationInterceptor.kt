@@ -1,19 +1,24 @@
 package com.ecommercedemo.gateway.config.web
 
 import com.ecommercedemo.common.controller.abstraction.request.CreateRequest
+import com.ecommercedemo.gateway.config.exception.AuthenticationFailureException
 import com.ecommercedemo.gateway.config.security.JwtUtil
-import com.ecommercedemo.gateway.service.SuperAdminCounter
+import com.ecommercedemo.gateway.service._UserRestService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
+import mu.KotlinLogging
+
 
 @Component
 class SuperAdminCreationInterceptor(
-    private val superAdminCounter: SuperAdminCounter
+    private val _userRestService: _UserRestService
 ) : HandlerInterceptor {
+
+    val log = KotlinLogging.logger {}
 
     override fun preHandle(
         request: HttpServletRequest,
@@ -24,15 +29,16 @@ class SuperAdminCreationInterceptor(
             val requestBody = request.inputStream.bufferedReader().use { it.readText() }
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
-            return true
+            log.error { "Error parsing request body: ${e.message}" }
+            return false
         }
 
-        if (createRequest.entityClassName != "User") return true
+        if (createRequest?.entityClassName != "User") return true
         else {
             if (createRequest.properties["userRole"] == "SUPER_ADMIN") {
                 val authentication = SecurityContextHolder.getContext().authentication
                 val creatorRole = extractRoleFromToken(authentication.credentials.toString())
-                val superAdminCount = superAdminCounter.getSuperAdminCount()
+                val superAdminCount = _userRestService.getSuperAdminCount()
 
                 when {
                     superAdminCount == 0 -> return true
@@ -41,14 +47,12 @@ class SuperAdminCreationInterceptor(
                 }
             }
         }
-
         return true
     }
 
     private fun extractRoleFromToken(token: String): String {
         val claims = JwtUtil.getClaimsFromToken(token)
-        return ""
-//        return claims["role"] as? String
-//            ?: throw AccessDeniedException("Unauthorized: Role claim is missing in token")
+        return claims["role"] as? String
+          ?: throw AuthenticationFailureException()
     }
 }

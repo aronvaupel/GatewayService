@@ -1,0 +1,14 @@
+### Create a New Super Admin
+POST {{baseUrl}}/users/createUser
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "firstSuperAdmin",
+    "userRole": "SUPER_ADMIN",
+    "password": "SuperSecurePassword123!"
+  }
+}
+
