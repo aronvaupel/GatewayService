@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service
 class _UserPersistenceAdapter(
     private val repository: _UserRepository
 ) : EntityPersistenceAdapter<_User>() {
-    fun getByUsernameAndPassword(username: String, password: String): _User? {
-        return repository.findByUsernameAndPassword(username, password)
+    fun getByUsernameAndPassword(username: String, hashedPassword: String): _User? {
+        return repository.findByUsernameAndPassword(username, hashedPassword)
     }
 
     fun getSuperAdminCount(): Int {

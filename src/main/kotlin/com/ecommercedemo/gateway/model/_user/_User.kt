@@ -20,6 +20,7 @@ open class _User(
 
     @ValidPassword
     @NotBlank(message = "Password is mandatory")
+    @Column(name = "password", nullable = false)
     private var _password: String = "",
 
     @Enumerated(EnumType.ORDINAL)
