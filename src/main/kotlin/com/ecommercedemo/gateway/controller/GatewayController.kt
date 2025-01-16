@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.net.HttpURLConnection
 import java.net.URI
-import java.net.URL
 import java.util.*
-import kotlin.reflect.KClass
 
 @RestController
 class GatewayController(
@@ -79,12 +77,12 @@ class GatewayController(
 
         val extractedVariables = extractPathVariablesFromPath(endpoint.path, path)
         val validPathVariables = extractedVariables.all { (name, value) ->
-            val expectedType = endpoint.pathVariables[name]
+            val expectedType = endpoint.pathVariables.firstOrNull { it.name == name }?.typeSimpleName
             validateType(value, expectedType)
         }
 
         val validQueryParams = queryParams.all { (name, values) ->
-            val expectedType = endpoint.requestParams[name]
+            val expectedType = endpoint.requestParameters.firstOrNull { it.name == name }?.typeSimpleName
             values.all { value ->
                 value == null || validateType(value, expectedType)
             }
@@ -92,7 +90,6 @@ class GatewayController(
 
         return validPathVariables && validQueryParams
     }
-
 
     private fun extractPathVariablesFromPath(template: String, path: String): Map<String, String> {
         val templateParts = template.split("/")
@@ -107,14 +104,14 @@ class GatewayController(
             }
     }
 
-    private fun validateType(value: String, expectedType: KClass<*>?): Boolean {
+    private fun validateType(value: String, expectedType: String?): Boolean {
         return try {
             when (expectedType) {
-                UUID::class -> UUID.fromString(value)
-                Int::class -> value.toInt()
-                Double::class -> value.toDouble()
-                Long::class -> value.toLong()
-                Boolean::class -> value.toBooleanStrict()
+                "UUID" -> UUID.fromString(value)
+                "Int" -> value.toInt()
+                "Double" -> value.toDouble()
+                "Long" -> value.toLong()
+                "Boolean" -> value.toBooleanStrict()
             }
             true
         } catch (e: Exception) {
@@ -141,4 +138,3 @@ class GatewayController(
         connection.inputStream.use { it.copyTo(response.outputStream) }
     }
 }
-
