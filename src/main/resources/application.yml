@@ -62,3 +62,4 @@ logging:
     org.springframework.context.annotation: WARN
     org.springframework.boot.autoconfigure: WARN
     org.apache.kafka: WARN
+
