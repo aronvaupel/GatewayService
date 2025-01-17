@@ -41,7 +41,7 @@ class GatewayController(
 
         val metadata = pollingService.getMetadataForService(serviceName)
         val endpoint = metadata?.firstOrNull { matchPathAndValidate(it, path, queryParams) }
-        if (endpoint == null || !endpoint.roles.contains(role)) {
+        if (endpoint == null || (!endpoint.roles.contains(role) && endpoint.roles.isNotEmpty())) {
             response.status = HttpServletResponse.SC_FORBIDDEN
             response.writer.write("Forbidden")
             return
