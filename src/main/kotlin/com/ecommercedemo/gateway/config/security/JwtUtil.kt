@@ -15,7 +15,7 @@ class JwtUtil {
     private lateinit var jwtSecret: String
 
     private val key by lazy {
-        Keys.hmacShaKeyFor(jwtSecret.toByteArray())
+        Keys.hmacShaKeyFor(jwtSecret.toByteArray(Charsets.UTF_8))
     }
 
     fun generateToken(

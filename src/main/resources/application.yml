@@ -50,7 +50,7 @@ cache:
 
 security:
   jwt:
-    secret: secret
+    secret: Gq9CJs7!wPv58aZL2YxNf6^KmRd3TqBzVUwJhXp4E
     access:
       expiration: 900000
     refresh:
