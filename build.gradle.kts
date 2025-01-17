@@ -79,6 +79,14 @@ dependencies {
 
 }
 
+configurations.all {
+	resolutionStrategy.eachDependency {
+		if (requested.group == "io.jsonwebtoken") {
+			useVersion("0.11.5")
+		}
+	}
+}
+
 dependencyManagement {
 	imports {
 		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")

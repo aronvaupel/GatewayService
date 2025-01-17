@@ -4,19 +4,21 @@ import com.ecommercedemo.common.application.validation.userrole.UserRole
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
+import javax.crypto.SecretKey
+import javax.crypto.spec.SecretKeySpec
 
 @Component
 class JwtUtil {
     @Value("\${security.jwt.secret}")
     private lateinit var jwtSecret: String
 
-    private val key by lazy {
-        Keys.hmacShaKeyFor(jwtSecret.toByteArray(Charsets.UTF_8))
-    }
+    private val key: SecretKey = SecretKeySpec(
+        jwtSecret.toByteArray(Charsets.UTF_8),
+        SignatureAlgorithm.HS256.jcaName
+    )
 
     fun generateToken(
         username: String,
