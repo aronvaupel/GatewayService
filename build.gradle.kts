@@ -52,7 +52,7 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:7.2.12")
+	implementation("com.github.aronvaupel:commons:7.2.13")
 	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
 	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -68,7 +68,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.1")
 	implementation("com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.15.2")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis:3.3.4")
 	implementation("org.postgresql:postgresql:42.7.2")
