@@ -29,6 +29,7 @@ class GatewayController(
         response: HttpServletResponse
     ) {
         val token = request.getHeader("Authorization")?.substring(7)
+        println("TOKEN RETRIEVED: $token")
         if (token == null || !jwtUtil.validateToken(token)) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("Unauthorized")
@@ -36,11 +37,15 @@ class GatewayController(
         }
 
         val role = jwtUtil.getRoleFromToken(token)
+        println("ROLE RETRIEVED: $role")
         val path = request.requestURI.removePrefix("/$serviceName")
+        println("PATH RETRIEVED: $path")
         val queryParams = request.parameterMap.mapValues { it.value.toList() }
-
+        println("QUERY PARAMS RETRIEVED: $queryParams")
         val metadata = pollingService.getMetadataForService(serviceName)
+        println("METADATA RETRIEVED: $metadata")
         val endpoint = metadata?.firstOrNull { matchPathAndValidate(it, path, queryParams) }
+        println("ENDPOINT RETRIEVED: $endpoint")
         if (endpoint == null || (!endpoint.roles.contains(role) && endpoint.roles.isNotEmpty())) {
             response.status = HttpServletResponse.SC_FORBIDDEN
             response.writer.write("Forbidden")
@@ -48,6 +53,7 @@ class GatewayController(
         }
 
         val instances = discoveryClient.getInstances(serviceName)
+        println("INSTANCES RETRIEVED: $instances")
         if (instances.isEmpty()) {
             response.status = HttpServletResponse.SC_NOT_FOUND
             response.writer.write("Service not found: $serviceName")
@@ -55,8 +61,9 @@ class GatewayController(
         }
 
         val targetUri = instances.first().uri.toString()
+        println("TARGET URI RETRIEVED: $targetUri")
         val forwardPath = "$targetUri$path"
-
+        println("FORWARD PATH RETRIEVED: $forwardPath")
         try {
             proxyRequest(request, response, forwardPath)
         } catch (e: Exception) {
@@ -73,15 +80,16 @@ class GatewayController(
         val pathRegex = endpoint.path
             .replace("{", "\\{").replace("}", "\\}")
             .replace("\\{[^/]+\\}", "[^/]+").toRegex()
-
+        println("MATCH AND VALIDATE - PATH REGEX: $pathRegex")
         if (!path.matches(pathRegex)) return false
 
         val extractedVariables = extractPathVariablesFromPath(endpoint.path, path)
+        println("MATCH AND VALIDATE - EXTRACTED VARIABLES: $extractedVariables")
         val validPathVariables = extractedVariables.all { (name, value) ->
             val expectedType = endpoint.pathVariables.firstOrNull { it.name == name }?.typeSimpleName
             validateType(value, expectedType)
         }
-
+        println("MATCH AND VALIDATE - VALID PATH VARIABLES: $validPathVariables")
         val validQueryParams = queryParams.all { (name, values) ->
             val expectedType = endpoint.requestParameters.firstOrNull { it.name == name }?.typeSimpleName
             values.all { value ->
@@ -127,12 +135,14 @@ class GatewayController(
         targetUrl: String
     ) {
         val connection = URI(targetUrl).toURL().openConnection() as HttpURLConnection
+        println("CONNECTION OPENED: $connection")
         connection.requestMethod = request.method
         connection.doOutput = true
         request.headerNames.toList().forEach { header ->
             connection.setRequestProperty(header, request.getHeader(header))
         }
         if (request.method in listOf("POST", "PUT", "PATCH")) {
+            println("REQUEST METHOD: ${request.method}")
             connection.outputStream.use { request.inputStream.copyTo(it) }
         }
         response.status = connection.responseCode
