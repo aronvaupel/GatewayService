@@ -15,7 +15,8 @@ import mu.KotlinLogging
 
 @Component
 class SuperAdminCreationInterceptor(
-    private val _userRestService: _UserRestService
+    private val _userRestService: _UserRestService,
+    private val jwtUtil: JwtUtil
 ) : HandlerInterceptor {
 
     val log = KotlinLogging.logger {}
@@ -51,7 +52,7 @@ class SuperAdminCreationInterceptor(
     }
 
     private fun extractRoleFromToken(token: String): String {
-        val claims = JwtUtil.getClaimsFromToken(token)
+        val claims = jwtUtil.getClaimsFromToken(token)
         return claims["role"] as? String
           ?: throw AuthenticationFailureException()
     }

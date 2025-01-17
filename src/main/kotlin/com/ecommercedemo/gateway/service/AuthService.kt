@@ -17,7 +17,8 @@ class AuthService(
     @Value("\${security.jwt.refresh.expiration}")
     private val refreshExpiration: Long,
     private val _userService: _UserRestService,
-    private val _permissionService: _PermissionRestService
+    private val _permissionService: _PermissionRestService,
+    private val jwtUtil: JwtUtil,
 ) {
     fun authenticate(username: String, password: String): Triple<String, String, UUID> {
         val encodedPassword = PasswordCrypto.hashPassword(password)
@@ -25,36 +26,36 @@ class AuthService(
             ?: throw AuthenticationFailureException()
 
         val permissions = _permissionService.getMultiple(user.permissions, 0, 1000).map { it.label }.toList()
-        val accessToken = JwtUtil.generateToken(
+        val accessToken = jwtUtil.generateToken(
             username, user.id, user.userRole, permissions, accessExpiration
         )
-        val refreshToken = JwtUtil.generateToken(
+        val refreshToken = jwtUtil.generateToken(
             username, user.id, user.userRole, permissions, refreshExpiration
         )
         return Triple(accessToken, refreshToken, user.id)
     }
 
     fun refreshToken(refreshToken: String): Pair<String, String?> {
-        if (!JwtUtil.validateToken(refreshToken)) {
+        if (!jwtUtil.validateToken(refreshToken)) {
             throw AuthenticationFailureException()
         }
-        val claims = JwtUtil.getClaimsFromToken(refreshToken)
+        val claims = jwtUtil.getClaimsFromToken(refreshToken)
         val username = claims.subject
         val userId = UUID.fromString(claims["id"].toString())
         val role = UserRole.valueOf(claims["role"].toString())
         val permissions = (claims["permissions"] as List<*>).map { it.toString() }
 
-        val newAccessToken = JwtUtil.generateToken(username, userId, role, permissions, accessExpiration)
-        val newRefreshToken = if (JwtUtil.isExpiringSoon(refreshToken)) {
-            JwtUtil.generateToken(username, userId, role, permissions, refreshExpiration)
+        val newAccessToken = jwtUtil.generateToken(username, userId, role, permissions, accessExpiration)
+        val newRefreshToken = if (jwtUtil.isExpiringSoon(refreshToken)) {
+            jwtUtil.generateToken(username, userId, role, permissions, refreshExpiration)
         } else null
         return Pair(newAccessToken, newRefreshToken)
     }
 
     fun loginAsGuest(): Triple<String, String, UUID> {
         val guestId = UUID.randomUUID()
-        val accessToken = JwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), accessExpiration)
-        val refreshToken = JwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), refreshExpiration)
+        val accessToken = jwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), accessExpiration)
+        val refreshToken = jwtUtil.generateToken("guest", guestId, UserRole.GUEST, emptyList(), refreshExpiration)
         return Triple(accessToken, refreshToken, guestId)
     }
 

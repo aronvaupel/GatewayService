@@ -11,13 +11,15 @@ import org.springframework.stereotype.Service
 import org.springframework.web.filter.OncePerRequestFilter
 
 @Service
-class JwtRequestFilter : OncePerRequestFilter() {
+class JwtRequestFilter(
+    private val jwtUtil: JwtUtil
+) : OncePerRequestFilter() {
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val token = request.getHeader("Authorization")?.substring(7)
-        if (token != null && JwtUtil.validateToken(token)) {
-            val username = JwtUtil.getUsernameFromToken(token)
-            val claims = JwtUtil.getClaimsFromToken(token)
+        if (token != null && jwtUtil.validateToken(token)) {
+            val username = jwtUtil.getUsernameFromToken(token)
+            val claims = jwtUtil.getClaimsFromToken(token)
             val role = claims["role"].toString()
             val permissions = (claims["permissions"] as? List<*>)?.filterIsInstance<String>() ?: emptyList()
 

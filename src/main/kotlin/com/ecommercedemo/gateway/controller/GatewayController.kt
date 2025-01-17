@@ -17,7 +17,8 @@ import java.util.*
 @RestController
 class GatewayController(
     private val discoveryClient: DiscoveryClient,
-    private val pollingService: EurekaPollingService
+    private val pollingService: EurekaPollingService,
+    private val jwtUtil: JwtUtil
 ) {
     val log = KotlinLogging.logger {}
 
@@ -28,13 +29,13 @@ class GatewayController(
         response: HttpServletResponse
     ) {
         val token = request.getHeader("Authorization")?.substring(7)
-        if (token == null || !JwtUtil.validateToken(token)) {
+        if (token == null || !jwtUtil.validateToken(token)) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("Unauthorized")
             return
         }
 
-        val role = JwtUtil.getRoleFromToken(token)
+        val role = jwtUtil.getRoleFromToken(token)
         val path = request.requestURI.removePrefix("/$serviceName")
         val queryParams = request.parameterMap.mapValues { it.value.toList() }
 
