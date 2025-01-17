@@ -8,14 +8,13 @@ import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.util.*
-import javax.crypto.SecretKey
 
 @Component
 class JwtUtil {
     @Value("\${security.jwt.secret}")
     private lateinit var jwtSecret: String
 
-    private val key: SecretKey by lazy {
+    private val key by lazy {
         Keys.hmacShaKeyFor(jwtSecret.toByteArray())
     }
 
@@ -32,7 +31,7 @@ class JwtUtil {
             .claim("permissions", permissions)
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expiration))
-            .signWith(SignatureAlgorithm.HS256, jwtSecret)
+            .signWith(key, SignatureAlgorithm.HS256)
             .compact()
     }
 
@@ -60,7 +59,7 @@ class JwtUtil {
             .body
     }
 
-    fun isExpiringSoon(token: String, thresholdMillis: Long = 300000): Boolean { // 5 minutes
+    fun isExpiringSoon(token: String, thresholdMillis: Long = 300000): Boolean {
         val expiration = getClaimsFromToken(token).expiration
         return expiration.time - System.currentTimeMillis() <= thresholdMillis
     }
