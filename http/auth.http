@@ -11,4 +11,8 @@ Content-Type: application/json
 POST {{ baseUrl }}/auth/loginAsGuest
 Content-Type: : application/json
 
-> {% token = response.body.accessToken %}
+> {%
+    client.global.set("token", response.body.accessToken)
+    console.log("Token: " + response.body.accessToken)
+    console.log("Token saved to global variable 'token': " + client.global.get("token"))
+%}

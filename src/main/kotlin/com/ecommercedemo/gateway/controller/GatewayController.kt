@@ -28,6 +28,7 @@ class GatewayController(
         request: HttpServletRequest,
         response: HttpServletResponse
     ) {
+        println("ATTEMPTING TO ROUTE REQUEST TO: $serviceName")
         val token = request.getHeader("Authorization")?.substring(7)
         println("TOKEN RETRIEVED: $token")
         if (token == null || !jwtUtil.validateToken(token)) {
