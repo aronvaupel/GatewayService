@@ -53,7 +53,7 @@ class GatewayController(
         println("ENDPOINT RETRIEVED: $endpoint")
         if (endpoint == null || (!endpoint.roles.contains(role) && endpoint.roles.isNotEmpty())) {
             response.status = HttpServletResponse.SC_FORBIDDEN
-            response.writer.write("Forbidden")
+            response.writer.write("Forbidden...")
             return
         }
 
