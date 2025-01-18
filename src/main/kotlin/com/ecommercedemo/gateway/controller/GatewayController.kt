@@ -1,7 +1,6 @@
 package com.ecommercedemo.gateway.controller
 
 import com.ecommercedemo.common.application.springboot.EndpointMetadata
-import com.ecommercedemo.common.application.validation.name.NameValidator
 import com.ecommercedemo.gateway.config.security.JwtUtil
 import com.ecommercedemo.gateway.eureka.EurekaPollingService
 import jakarta.servlet.http.HttpServletRequest
