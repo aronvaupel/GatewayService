@@ -29,9 +29,7 @@ class GatewayController(
         request: HttpServletRequest,
         response: HttpServletResponse
     ) {
-        println("ATTEMPTING TO ROUTE REQUEST TO: $serviceName")
         val token = request.getHeader("Authorization")?.substring(7)
-        println("TOKEN RETRIEVED: $token")
         if (token == null || !jwtUtil.validateToken(token)) {
             response.status = HttpServletResponse.SC_UNAUTHORIZED
             response.writer.write("Unauthorized")
@@ -39,18 +37,13 @@ class GatewayController(
         }
 
         val role = jwtUtil.getRoleFromToken(token)
-        println("ROLE RETRIEVED: $role")
         val path = request.requestURI
         val method = request.method
-        println("PATH RETRIEVED: $path")
         val queryParams = request.parameterMap.mapValues { it.value.toList() }
-        println("QUERY PARAMS RETRIEVED: $queryParams")
         val preFilteredMetadata = pollingService.getMetadataForService(serviceName)?.filter {
             it.method == method && it.path.contains(serviceName)
         }
-        println("PRE-FILTERED METADATA RETRIEVED: $preFilteredMetadata")
         val endpoint = preFilteredMetadata?.firstOrNull { matchPathAndValidate(it, path, queryParams) }
-        println("ENDPOINT RETRIEVED: $endpoint")
         if (endpoint == null || (!endpoint.roles.contains(role) && endpoint.roles.isNotEmpty())) {
             response.status = HttpServletResponse.SC_FORBIDDEN
             response.writer.write("Forbidden...")
@@ -58,7 +51,6 @@ class GatewayController(
         }
 
         val instances = discoveryClient.getInstances(serviceName)
-        println("INSTANCES RETRIEVED: $instances")
         if (instances.isEmpty()) {
             response.status = HttpServletResponse.SC_NOT_FOUND
             response.writer.write("Service not found: $serviceName")
@@ -66,9 +58,7 @@ class GatewayController(
         }
 
         val targetUri = "http://${serviceName}:${instances.first().port}"
-        println("TARGET URI RETRIEVED: $targetUri")
         val forwardPath = "$targetUri${path.removePrefix("/$serviceName")}"
-        println("FORWARD PATH RETRIEVED: $forwardPath")
         try {
             proxyRequest(request, response, forwardPath)
         } catch (e: Exception) {
@@ -83,19 +73,15 @@ class GatewayController(
         queryParams: Map<String, List<String?>>
     ): Boolean {
         val requestSegments = path.split("/").filter { it.isNotEmpty() }
-        println("CHECK - REQUEST SEGMENTS: $requestSegments")
         val candidateSegments = candidate.path.split("/").filter { it.isNotEmpty() }
-        println("CHECK - CANDIDATE SEGMENTS: $candidateSegments")
         if (requestSegments.size != candidateSegments.size) return false
 
         candidateSegments.forEachIndexed { index, segment ->
             val requestSegment = requestSegments[index]
-            println("CHECK - FIRST LOOP - SEGMENT: $segment,REQUEST SEGMENT: $requestSegment")
             if (!segment.startsWith("{") || !segment.endsWith("}")) {
                 if (segment != requestSegment) return false
             } else {
                 val variableName = segment.trim('{', '}')
-                println("CHECK - FIRST LOOP - VARIABLE NAME: $variableName")
                 val variableMetadata = candidate.pathVariables.firstOrNull { it.name == variableName }
                     ?: return false
                 if (!validateType(requestSegment, variableMetadata.typeSimpleName)) {
@@ -132,14 +118,12 @@ class GatewayController(
         targetUrl: String
     ) {
         val connection = URI(targetUrl).toURL().openConnection() as HttpURLConnection
-        println("CONNECTION OPENED: $connection")
         connection.requestMethod = request.method
         connection.doOutput = true
         request.headerNames.toList().forEach { header ->
             connection.setRequestProperty(header, request.getHeader(header))
         }
         if (request.method in listOf("POST", "PUT", "PATCH")) {
-            println("REQUEST METHOD: ${request.method}")
             connection.outputStream.use { request.inputStream.copyTo(it) }
         }
         response.status = connection.responseCode

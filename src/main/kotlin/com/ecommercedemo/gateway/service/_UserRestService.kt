@@ -17,6 +17,7 @@ class _UserRestService(
 ) : DownstreamRestServiceTemplate<_User>() {
     fun getByUsernameAndPassword(username: String, password: String): _User? {
         val hashedPassword = PasswordCrypto.hashPassword(password)
+        println("hashedPassword: $hashedPassword")
         return adapter.getByUsernameAndPassword(username, hashedPassword)
     }
     fun getSuperAdminCount(): Int {
