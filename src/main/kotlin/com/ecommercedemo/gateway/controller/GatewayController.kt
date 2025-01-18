@@ -14,6 +14,7 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.util.*
 
+@Suppress("HttpUrlsUsage")
 @RestController
 class GatewayController(
     private val discoveryClient: DiscoveryClient,
