@@ -3,9 +3,15 @@ POST {{ baseUrl }}/auth/login
 Content-Type: application/json
 
 {
-  "username": "superadmin",
-  "password": "Password123!"
+  "username": "firstSuperAdmin",
+  "password": "SuperSecurePassword123!"
 }
+
+> {%
+    client.global.set("token", response.body.accessToken)
+    console.log("Token: " + response.body.accessToken)
+    console.log("Token saved to global variable 'token': " + client.global.get("token"))
+%}
 
 ### Authenticate as Guest
 POST {{ baseUrl }}/auth/loginAsGuest
