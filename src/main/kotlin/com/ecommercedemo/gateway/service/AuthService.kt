@@ -21,7 +21,7 @@ class AuthService(
     private val jwtUtil: JwtUtil,
 ) {
     fun authenticate(username: String, password: String): Triple<String, String, UUID> {
-        val user = _userService.getByUsername(username)
+        val user = _userService.getByUsername(username)?: throw AuthenticationFailureException()
         if (!PasswordCrypto.matches(password, user.password)) {
             val permissions = _permissionService.getMultiple(user.permissions, 0, 1000).map { it.label }.toList()
             val accessToken = jwtUtil.generateToken(
