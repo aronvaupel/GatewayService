@@ -64,9 +64,9 @@ class GatewayController(
             return
         }
 
-        val targetUri = instances.first().uri.toString()
+        val targetUri = "http://${serviceName}:${instances.first().port}"
         println("TARGET URI RETRIEVED: $targetUri")
-        val forwardPath = "$targetUri$path"
+        val forwardPath = "$targetUri${path.removePrefix("/$serviceName")}"
         println("FORWARD PATH RETRIEVED: $forwardPath")
         try {
             proxyRequest(request, response, forwardPath)
