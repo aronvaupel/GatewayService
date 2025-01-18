@@ -20,7 +20,6 @@ class GatewayController(
     private val discoveryClient: DiscoveryClient,
     private val pollingService: EurekaPollingService,
     private val jwtUtil: JwtUtil,
-    nameValidator: NameValidator
 ) {
     val log = KotlinLogging.logger {}
 
