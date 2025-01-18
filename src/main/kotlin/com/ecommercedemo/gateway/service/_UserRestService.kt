@@ -15,10 +15,8 @@ import org.springframework.stereotype.Service
 class _UserRestService(
     private val adapter: _UserPersistenceAdapter
 ) : DownstreamRestServiceTemplate<_User>() {
-    fun getByUsernameAndPassword(username: String, password: String): _User? {
-        val hashedPassword = PasswordCrypto.hashPassword(password)
-        println("hashedPassword: $hashedPassword")
-        return adapter.getByUsernameAndPassword(username, hashedPassword)
+    fun getByUsername(username: String): _User? {
+        return adapter.getByUsernameAndPassword(username, password)
     }
     fun getSuperAdminCount(): Int {
         return adapter.getSuperAdminCount()

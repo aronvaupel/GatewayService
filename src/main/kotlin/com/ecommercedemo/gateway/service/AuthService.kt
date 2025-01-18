@@ -21,17 +21,19 @@ class AuthService(
     private val jwtUtil: JwtUtil,
 ) {
     fun authenticate(username: String, password: String): Triple<String, String, UUID> {
-        val user = _userService.getByUsernameAndPassword(username, password)
-            ?: throw AuthenticationFailureException()
-
-        val permissions = _permissionService.getMultiple(user.permissions, 0, 1000).map { it.label }.toList()
-        val accessToken = jwtUtil.generateToken(
-            username, user.id, user.userRole, permissions, accessExpiration
-        )
-        val refreshToken = jwtUtil.generateToken(
-            username, user.id, user.userRole, permissions, refreshExpiration
-        )
-        return Triple(accessToken, refreshToken, user.id)
+        val user = _userService.getByUsername(username)
+        if (!PasswordCrypto.matches(password, user.password)) {
+            val permissions = _permissionService.getMultiple(user.permissions, 0, 1000).map { it.label }.toList()
+            val accessToken = jwtUtil.generateToken(
+                username, user.id, user.userRole, permissions, accessExpiration
+            )
+            val refreshToken = jwtUtil.generateToken(
+                username, user.id, user.userRole, permissions, refreshExpiration
+            )
+            return Triple(accessToken, refreshToken, user.id)
+        } else {
+            throw AuthenticationFailureException()
+        }
     }
 
     fun refreshToken(refreshToken: String): Pair<String, String?> {

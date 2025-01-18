@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class _UserPersistenceAdapter(
     private val repository: _UserRepository
 ) : EntityPersistenceAdapter<_User>() {
-    fun getByUsernameAndPassword(username: String, hashedPassword: String): _User? {
+    fun getByUsername(username: String): _User? {
         return repository.findByUsernameAndPassword(username, hashedPassword)
     }
 

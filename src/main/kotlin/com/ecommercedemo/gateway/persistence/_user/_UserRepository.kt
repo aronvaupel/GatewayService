@@ -10,7 +10,6 @@ import java.util.*
 
 @Suppress("ClassName", "unused")
 interface _UserRepository : EntityRepository<_User, UUID> {
-    @Query("SELECT u FROM _User u WHERE u.username = :username AND u._password = :hashedPassword")
-    fun findByUsernameAndPassword(@Param("username") username: String, @Param("hashedPassword") hashedPassword: String): _User?
+    fun findByUsername(username: String): _User?
     fun countByUserRoleIs(userRole: UserRole): Int
 }
