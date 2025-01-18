@@ -16,7 +16,7 @@ class _UserRestService(
     private val adapter: _UserPersistenceAdapter
 ) : DownstreamRestServiceTemplate<_User>() {
     fun getByUsername(username: String): _User? {
-        return adapter.getByUsernameAndPassword(username, password)
+        return adapter.getByUsername(username)
     }
     fun getSuperAdminCount(): Int {
         return adapter.getSuperAdminCount()

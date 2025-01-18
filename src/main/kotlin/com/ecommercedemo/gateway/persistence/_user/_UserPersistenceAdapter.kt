@@ -13,7 +13,7 @@ class _UserPersistenceAdapter(
     private val repository: _UserRepository
 ) : EntityPersistenceAdapter<_User>() {
     fun getByUsername(username: String): _User? {
-        return repository.findByUsernameAndPassword(username, hashedPassword)
+        return repository.findByUsername(username)
     }
 
     fun getSuperAdminCount(): Int {
