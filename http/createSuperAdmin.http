@@ -1,5 +1,5 @@
 ### Create a New Super Admin
-POST {{baseUrl}}/user-service/users/createUser
+POST {{baseUrl}}/user-service/users
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

@@ -1,6 +1,7 @@
 package com.ecommercedemo.gateway.controller
 
 import com.ecommercedemo.common.application.springboot.EndpointMetadata
+import com.ecommercedemo.common.application.validation.name.NameValidator
 import com.ecommercedemo.gateway.config.security.JwtUtil
 import com.ecommercedemo.gateway.eureka.EurekaPollingService
 import jakarta.servlet.http.HttpServletRequest
@@ -18,7 +19,8 @@ import java.util.*
 class GatewayController(
     private val discoveryClient: DiscoveryClient,
     private val pollingService: EurekaPollingService,
-    private val jwtUtil: JwtUtil
+    private val jwtUtil: JwtUtil,
+    nameValidator: NameValidator
 ) {
     val log = KotlinLogging.logger {}
 
@@ -39,13 +41,16 @@ class GatewayController(
 
         val role = jwtUtil.getRoleFromToken(token)
         println("ROLE RETRIEVED: $role")
-        val path = request.requestURI.removePrefix("/$serviceName")
+        val path = request.requestURI
+        val method = request.method
         println("PATH RETRIEVED: $path")
         val queryParams = request.parameterMap.mapValues { it.value.toList() }
         println("QUERY PARAMS RETRIEVED: $queryParams")
-        val metadata = pollingService.getMetadataForService(serviceName)
-        println("METADATA RETRIEVED: $metadata")
-        val endpoint = metadata?.firstOrNull { matchPathAndValidate(it, path, queryParams) }
+        val preFilteredMetadata = pollingService.getMetadataForService(serviceName)?.filter {
+            it.method == method && it.path.contains(serviceName)
+        }
+        println("PRE-FILTERED METADATA RETRIEVED: $preFilteredMetadata")
+        val endpoint = preFilteredMetadata?.firstOrNull { matchPathAndValidate(it, path, queryParams) }
         println("ENDPOINT RETRIEVED: $endpoint")
         if (endpoint == null || (!endpoint.roles.contains(role) && endpoint.roles.isNotEmpty())) {
             response.status = HttpServletResponse.SC_FORBIDDEN
@@ -74,44 +79,36 @@ class GatewayController(
     }
 
     private fun matchPathAndValidate(
-        endpoint: EndpointMetadata,
+        candidate: EndpointMetadata,
         path: String,
         queryParams: Map<String, List<String?>>
     ): Boolean {
-        val pathRegex = endpoint.path
-            .replace("{", "\\{").replace("}", "\\}")
-            .replace("\\{[^/]+\\}", "[^/]+").toRegex()
-        println("MATCH AND VALIDATE - PATH REGEX: $pathRegex")
-        if (!path.matches(pathRegex)) return false
+        val requestSegments = path.split("/").filter { it.isNotEmpty() }
+        println("CHECK - REQUEST SEGMENTS: $requestSegments")
+        val candidateSegments = candidate.path.split("/").filter { it.isNotEmpty() }
+        println("CHECK - CANDIDATE SEGMENTS: $candidateSegments")
+        if (requestSegments.size != candidateSegments.size) return false
 
-        val extractedVariables = extractPathVariablesFromPath(endpoint.path, path)
-        println("MATCH AND VALIDATE - EXTRACTED VARIABLES: $extractedVariables")
-        val validPathVariables = extractedVariables.all { (name, value) ->
-            val expectedType = endpoint.pathVariables.firstOrNull { it.name == name }?.typeSimpleName
-            validateType(value, expectedType)
-        }
-        println("MATCH AND VALIDATE - VALID PATH VARIABLES: $validPathVariables")
-        val validQueryParams = queryParams.all { (name, values) ->
-            val expectedType = endpoint.requestParameters.firstOrNull { it.name == name }?.typeSimpleName
-            values.all { value ->
-                value == null || validateType(value, expectedType)
+        candidateSegments.forEachIndexed { index, segment ->
+            val requestSegment = requestSegments[index]
+            println("CHECK - FIRST LOOP - SEGMENT: $segment,REQUEST SEGMENT: $requestSegment")
+            if (!segment.startsWith("{") || !segment.endsWith("}")) {
+                if (segment != requestSegment) return false
+            } else {
+                val variableName = segment.trim('{', '}')
+                println("CHECK - FIRST LOOP - VARIABLE NAME: $variableName")
+                val variableMetadata = candidate.pathVariables.firstOrNull { it.name == variableName }
+                    ?: return false
+                if (!validateType(requestSegment, variableMetadata.typeSimpleName)) {
+                    return false
+                }
             }
         }
 
-        return validPathVariables && validQueryParams
-    }
-
-    private fun extractPathVariablesFromPath(template: String, path: String): Map<String, String> {
-        val templateParts = template.split("/")
-        val pathParts = path.split("/")
-
-        if (templateParts.size != pathParts.size) return emptyMap()
-
-        return templateParts.zip(pathParts)
-            .filter { (templatePart, _) -> templatePart.startsWith("{") && templatePart.endsWith("}") }
-            .associate { (templatePart, pathPart) ->
-                templatePart.trim('{', '}') to pathPart
-            }
+        return queryParams.all { (paramName, paramValues) ->
+            val paramMetadata = candidate.requestParameters.firstOrNull { it.name == paramName } ?: return false
+            paramValues.all { value -> value != null && validateType(value, paramMetadata.typeSimpleName) }
+        }
     }
 
     private fun validateType(value: String, expectedType: String?): Boolean {
