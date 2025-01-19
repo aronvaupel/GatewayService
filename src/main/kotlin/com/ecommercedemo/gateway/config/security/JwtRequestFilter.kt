@@ -18,6 +18,11 @@ class JwtRequestFilter(
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
+        val path = request.requestURI
+        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
+            chain.doFilter(request, response)
+            return
+        }
         val token = request.getHeader("Authorization")?.substring(7)
         if (token != null && jwtUtil.validateToken(token)) {
             val username = jwtUtil.getUsernameFromToken(token)
