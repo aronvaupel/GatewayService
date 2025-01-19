@@ -26,7 +26,10 @@ class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
                         "/v3/api-docs/**",
                         "/v3/api-docs.yaml",
                         "/swagger-resources/**",
-                        "/webjars/**"
+                        "/webjars/**",
+                        "/actuator/health",
+                        "/favicon.ico",
+                        "/error"
                     ).permitAll()
                     .anyRequest().authenticated()
             }
