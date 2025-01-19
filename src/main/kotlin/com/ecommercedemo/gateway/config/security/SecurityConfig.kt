@@ -20,6 +20,7 @@ class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
                 authz
                     .requestMatchers(
                         "/auth/**",
+                        "/swagger-ui/index.html",
                         "/swagger-ui.html",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
