@@ -32,7 +32,6 @@ class EurekaPollingService(private val discoveryClient: DiscoveryClient) {
     }
 
     private fun parseMetadata(metadata: String): List<EndpointMetadata> {
-        println("RECEIVED METADATA: $metadata")
         return ObjectMapper().readValue(metadata, object : TypeReference<List<EndpointMetadata>>() {})
     }
 }
