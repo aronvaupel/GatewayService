@@ -1,23 +1,24 @@
 package com.ecommercedemo.gateway.controller
 
-import com.ecommercedemo.gateway.config.security.JwtUtil
 import com.ecommercedemo.gateway.dto.auth.AuthRequest
 import com.ecommercedemo.gateway.dto.auth.AuthResponse
 import com.ecommercedemo.gateway.service.AuthService
 import com.ecommercedemo.gateway.service.UserActivityTrackerService
-import jakarta.servlet.http.Cookie
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.web.bind.annotation.*
-import java.util.*
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication API", description = "Endpoints for user authentication.")
 class AuthController(
     private val activityTracker: UserActivityTrackerService,
     private val authService: AuthService
 ) {
 
     @PostMapping("/login")
+    @Operation(summary = "Login with username and password.")
     fun login(
         @RequestBody authRequest: AuthRequest,
         response: HttpServletResponse
@@ -28,6 +29,7 @@ class AuthController(
         return AuthResponse(accessToken)
     }
 
+    @Operation(summary = "Refresh authentication tokens.")
     @PostMapping("/refresh")
     fun refresh(@CookieValue("refreshToken") refreshToken: String, response: HttpServletResponse): AuthResponse {
         val (newAccessToken, updatedRefreshToken) = authService.refreshToken(refreshToken)
