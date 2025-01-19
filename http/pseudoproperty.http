@@ -1,0 +1,167 @@
+### Create simple pseudoProperty
+POST http://localhost:8080/pseudo-properties
+Content-Type: application/json
+
+{
+  "entityClassName": "PseudoProperty",
+  "properties": {
+    "entitySimpleName": "User",
+    "key": "dateOfBirth",
+    "typeDescriptor": {
+      "category": "TIME",
+      "isNullable": false,
+      "type": "LOCAL_DATE"
+    }
+  }
+}
+
+### Create complex pseudoProperty
+POST http://localhost:8080/pseudo-properties
+Content-Type: application/json
+
+{
+  "entityClassName": "PseudoProperty",
+  "properties": {
+    "entitySimpleName": "User",
+    "key": "superTest",
+    "typeDescriptor": {
+      "category": "COMPLEX",
+      "type": "OBJECT",
+      "isNullable": false,
+      "fields": {
+        "primitiveString": {
+          "category": "PRIMITIVE",
+          "type": "STRING",
+          "isNullable": true
+        },
+        "primitiveInt": {
+          "category": "PRIMITIVE",
+          "type": "INTEGER",
+          "isNullable": true
+        },
+        "primitiveDouble": {
+          "category": "PRIMITIVE",
+          "type": "DOUBLE",
+          "isNullable": true
+        },
+        "primitiveBoolean": {
+          "category": "PRIMITIVE",
+          "type": "BOOLEAN",
+          "isNullable": true
+        },
+        "timeLocalDate": {
+          "category": "TIME",
+          "type": "LOCAL_DATE",
+          "isNullable": true
+        },
+        "timeInstant": {
+          "category": "TIME",
+          "type": "INSTANT",
+          "isNullable": true
+        },
+        "timeZonedDateTime": {
+          "category": "TIME",
+          "type": "ZONED_DATE_TIME",
+          "isNullable": true
+        },
+        "listOfStrings": {
+          "category": "COLLECTION",
+          "type": "LIST",
+          "itemDescriptor": {
+            "category": "PRIMITIVE",
+            "type": "STRING",
+            "isNullable": false
+          },
+          "minElements": 0,
+          "maxElements": null
+        },
+        "setOfInts": {
+          "category": "COLLECTION",
+          "type": "SET",
+          "itemDescriptor": {
+            "category": "PRIMITIVE",
+            "type": "INTEGER",
+            "isNullable": false
+          },
+          "minElements": 0,
+          "maxElements": null
+        },
+        "mapOfStringToInt": {
+          "category": "MAP",
+          "type": "MAP",
+          "keyDescriptor": {
+            "category": "PRIMITIVE",
+            "type": "STRING",
+            "isNullable": false
+          },
+          "valueDescriptor": {
+            "category": "PRIMITIVE",
+            "type": "INTEGER",
+            "isNullable": false
+          },
+          "minEntries": 0,
+          "maxEntries": null
+        },
+        "complexObject": {
+          "category": "COMPLEX",
+          "type": "OBJECT",
+          "isNullable": false,
+          "fields": {
+            "nestedPrimitive": {
+              "category": "PRIMITIVE",
+              "type": "BOOLEAN",
+              "isNullable": true
+            },
+            "nestedTime": {
+              "category": "TIME",
+              "type": "OFFSET_TIME",
+              "isNullable": true
+            },
+            "nestedList": {
+              "category": "COLLECTION",
+              "type": "LIST",
+              "itemDescriptor": {
+                "category": "PRIMITIVE",
+                "type": "BIG_DECIMAL",
+                "isNullable": false
+              },
+              "minElements": 0,
+              "maxElements": null
+            },
+            "nestedComplexObject": {
+              "category": "COMPLEX",
+              "type": "OBJECT",
+              "isNullable": false,
+              "fields": {
+                "deepNestedString": {
+                  "category": "PRIMITIVE",
+                  "type": "STRING",
+                  "isNullable": true
+                },
+                "deepNestedInstant": {
+                  "category": "TIME",
+                  "type": "INSTANT",
+                  "isNullable": true
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+### Rename pseudo property
+PATCH  http://localhost:8080/pseudo-properties
+Content-Type: application/json
+
+{
+  "id": "731bf1af-996a-4fae-b8e7-9aee6fb6cb91",
+  "properties": {
+    "key": "birthday"
+  }
+}
+
+### Delete pseudo property
+DELETE http://localhost:8080/pseudo-properties/e9acf553-5bac-4826-8eb6-201949e4ce7b

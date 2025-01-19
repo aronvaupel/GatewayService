@@ -1,0 +1,60 @@
+### Create first Super Admin
+POST {{baseUrl}}/user-service/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "firstSuperAdmin",
+    "userRole": "SUPER_ADMIN",
+    "password": "SuperSecurePassword123!"
+  }
+}
+
+### Create second Super Admin
+POST {{baseUrl}}/user-service/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "firstSuperAdmin",
+    "userRole": "SUPER_ADMIN",
+    "password": "SuperSecurePassword123!"
+  }
+}
+
+### Create third Super Admin
+POST {{baseUrl}}/user-service/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "firstSuperAdmin",
+    "userRole": "SUPER_ADMIN",
+    "password": "SuperSecurePassword123!"
+  }
+}
+
+### Create fourth Super Admin (should fail)
+POST {{baseUrl}}/user-service/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "firstSuperAdmin",
+    "userRole": "SUPER_ADMIN",
+    "password": "SuperSecurePassword123!"
+  }
+}
+
+> {%
+    console.log(request.headers);
+    console.log(response.body);
+%}

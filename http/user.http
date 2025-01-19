@@ -1,0 +1,283 @@
+### Create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "entityClassName": "User",
+  "properties": {
+    "username": "aron",
+    "password": "12345678Aa!",
+    "userRole": "REGISTERED_USER",
+    "userInfo": {
+      "email": "mail@mail.com",
+      "firstName": "Aron",
+      "lastName": "Vaupel"
+    },
+    "pseudoProperties": {
+      "dateOfBirth": "2024-12-20"
+    }
+  }
+}
+
+### Update user
+PATCH http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "id": "bfc7f1a2-8283-4729-a535-25ab23016257",
+  "properties": {
+    "pseudoProperties": {
+      "birthday": "2024-12-30"
+    }
+  }
+}
+
+### Update user with complex pseudoProperty
+PATCH http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "id": "98b11529-ca4d-48fb-9a31-98e17c441068",
+  "properties": {
+    "pseudoProperties": {
+      "superTest": {
+        "primitiveString": "Sample String",
+        "primitiveInt": 43,
+        "primitiveDouble": 99.99,
+        "primitiveBoolean": true,
+        "timeLocalDate": "2024-12-07",
+        "timeInstant": "2024-12-05T12:34:56.789Z",
+        "timeZonedDateTime": "2024-12-05T12:34:56.789+02:00",
+        "listOfStrings": [
+          "item1",
+          "item2",
+          "item3"
+        ],
+        "setOfInts": [
+          1,
+          2,
+          3
+        ],
+        "mapOfStringToInt": {
+          "example": 100
+        },
+        "complexObject": {
+          "nestedPrimitive": true,
+          "nestedTime": "10:15:30+01:00",
+          "nestedList": [
+            123.45,
+            678.90
+          ],
+          "nestedComplexObject": {
+            "deepNestedString": "Nested Value",
+            "deepNestedInstant": "2024-12-05T10:15:30.123Z"
+          }
+        }
+      }
+    }
+  }
+}
+
+### Get user by id
+GET http://localhost:8080/users/bfc7f1a2-8283-4729-a535-25ab23016257
+
+Content-Type: : application/json
+
+### Delete a user
+DELETE http://localhost:8080/users/bfc7f1a2-8283-4729-a535-25ab23016257
+
+### Get users by username (EQUALS)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "EQUALS",
+      "searchValue": "aron",
+      "path": "username"
+    }
+  ]
+}
+
+### Get users by username (NOT_EQUALS)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "NOT_EQUALS",
+      "searchValue": "adm",
+      "path": "username"
+    }
+  ]
+}
+
+### Get users by email in UserInfo (CONTAINS)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "STARTS_WITH",
+      "searchValue": "b",
+      "path": "username"
+    }
+  ]
+}
+
+### Get users by username (STARTS_WITH)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "b",
+      "path": "username"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "b",
+      "path": "userInfo.firstName"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "b",
+      "path": "userInfo.lastName"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "b",
+      "path": "userInfo.email"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "0",
+      "path": "userInfo.phoneNumber"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "2",
+      "path": "userInfo.houseNumber"
+    },
+    {
+      "operator": "DOES_NOT_START_WITH",
+      "searchValue": "b",
+      "path": "userInfo.street"
+    },
+    {
+      "operator": "ENUM_EQUALS",
+      "searchValue": "3",
+      "path": "userRole"
+    }
+  ]
+}
+
+### Get users by username (ENDS_WITH)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "ENDS_WITH",
+      "searchValue": "z",
+      "path": "username"
+    }
+  ]
+}
+
+### Get users by creation date (BEFORE)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "BEFORE",
+      "searchValue": "2024-12-20T20:00:00.000Z",
+      "path": "createdAt"
+    }
+  ]
+}
+
+### Get users by creation date (AFTER)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "AFTER",
+      "searchValue": "2024-11-08T19:00:00.000Z",
+      "path": "createdAt"
+    }
+  ]
+}
+
+### Get users by role (ENUM_EQUALS)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "ENUM_EQUALS",
+      "searchValue": "REGISTERED_USER",
+      "path": "userRole"
+    }
+  ]
+}
+
+### Get users by pseudoProperty (EQUALS)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "EQUALS",
+      "searchValue": "Augustus",
+      "path": "userInfo.firstName"
+    }
+  ]
+}
+
+### Get users by activity timestamp (BETWEEN)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+{
+  "params": [
+    {
+      "operator": "BETWEEN",
+      "searchValue": [
+        "2024-11-08T19:00:00.000",
+        "2024-12-31T20:00:00.000"
+      ],
+      "path": "userInfo.createdAt"
+    }
+  ]
+}
+
+### Get users by multiple criteria (username and email)
+GET http://localhost:8080/users/search
+Content-Type: application/json
+
+{
+  "params": [
+    {
+      "operator": "ENUM_EQUALS",
+      "searchValue": "USA",
+      "path": "userInfo.country"
+    },
+    {
+      "operator": "ENUM_EQUALS",
+      "searchValue": "REGISTERED_USER",
+      "path": "userRole"
+    }
+  ]
+}
