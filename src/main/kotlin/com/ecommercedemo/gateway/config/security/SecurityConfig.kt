@@ -29,7 +29,7 @@ class SecurityConfig(private val jwtRequestFilter: JwtRequestFilter) {
                         "/webjars/**",
                         "/actuator/health",
                         "/favicon.ico",
-                        "/error"
+                        "/error/**"
                     ).permitAll()
                     .anyRequest().authenticated()
             }
