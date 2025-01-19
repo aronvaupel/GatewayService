@@ -19,6 +19,7 @@ class JwtRequestFilter(
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val path = request.requestURI
+        logger.debug("Request URI: $path")
         if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
             logger.debug("Swagger-related path detected, skipping JWT validation.")
             chain.doFilter(request, response)
