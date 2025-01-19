@@ -62,7 +62,9 @@ logging:
     org.springframework.context.annotation: WARN
     org.springframework.boot.autoconfigure: WARN
     org.apache.kafka: WARN
-    org.springframework.security: DEBUG
+    org.springframework.security: TRACE
+    org.springframework.security.web.FilterChainProxy: TRACE
+    org.springframework.web: TRACE
 
 springdoc:
   swagger-ui:
