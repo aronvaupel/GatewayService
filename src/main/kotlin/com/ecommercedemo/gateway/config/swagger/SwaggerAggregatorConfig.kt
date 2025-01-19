@@ -19,6 +19,7 @@ class SwaggerAggregatorConfig(
             val instances = discoveryClient.getInstances(serviceName)
             instances.forEach { instance ->
                 val openApiUrl = instance.metadata["openapi-docs"]
+                println("SERVICE: $serviceName, OPENAPI URL: $openApiUrl")
                 if (!openApiUrl.isNullOrBlank()) {
                     swaggerUiConfigParameters.addGroup(serviceName, openApiUrl)
                 }

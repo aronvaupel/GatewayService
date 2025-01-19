@@ -63,3 +63,10 @@ logging:
     org.springframework.boot.autoconfigure: WARN
     org.apache.kafka: WARN
 
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
