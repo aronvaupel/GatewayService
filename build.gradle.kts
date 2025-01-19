@@ -52,17 +52,17 @@ repositories {
 extra["springCloudVersion"] = "2023.0.3"
 
 dependencies {
-	implementation("com.github.aronvaupel:commons:7.4.3")
+	implementation("com.github.aronvaupel:commons:7.4.4")
 	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
 	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 	implementation("org.webjars:webjars-locator-core")
 	implementation("org.webjars:swagger-ui")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.cloud:spring-cloud-starter-gateway-mvc")
+	implementation("org.springframework.cloud:spring-cloud-starter-gateway-mvc:2.6.0")
 	implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.1.3")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
