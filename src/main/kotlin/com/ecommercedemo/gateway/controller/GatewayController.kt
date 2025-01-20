@@ -16,7 +16,7 @@ class GatewayController(
 ) {
 
     @Operation(summary = "Route requests to downstream services.")
-    @RequestMapping("/{serviceName:^(?!(swagger|webjar)).*}/**")
+    @RequestMapping("/{serviceName:^(?!swagger).*}/**")
     fun routeRequest(
         @PathVariable serviceName: String,
         request: HttpServletRequest,
