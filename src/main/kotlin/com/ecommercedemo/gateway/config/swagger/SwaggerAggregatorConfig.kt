@@ -3,10 +3,8 @@ package com.ecommercedemo.gateway.config.swagger
 import jakarta.annotation.PostConstruct
 import org.springdoc.core.properties.SwaggerUiConfigParameters
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.DependsOn
 
 @Configuration
-@DependsOn("discoveryClient")
 class SwaggerAggregatorConfig(
     private val swaggerUiConfigParameters: SwaggerUiConfigParameters,
     private val discoveryClient: org.springframework.cloud.client.discovery.DiscoveryClient
