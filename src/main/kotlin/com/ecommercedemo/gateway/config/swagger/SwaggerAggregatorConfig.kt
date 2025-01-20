@@ -1,13 +1,13 @@
 package com.ecommercedemo.gateway.config.swagger
 
-import org.springdoc.core.properties.SwaggerUiConfigParameters
+import org.springdoc.core.models.GroupedOpenApi
+import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
 
 @Configuration
 class SwaggerAggregatorConfig(
-    private val swaggerUiConfigParameters: SwaggerUiConfigParameters,
-    private val discoveryClient: org.springframework.cloud.client.discovery.DiscoveryClient
+    private val discoveryClient: DiscoveryClient
 ) {
 
     @Scheduled(fixedRate = 30000)
@@ -21,8 +21,12 @@ class SwaggerAggregatorConfig(
                 val openApiUrl = instance.metadata["openapi-docs"]
                 println("SERVICE: $serviceName, OPENAPI URL: $openApiUrl")
                 if (!openApiUrl.isNullOrBlank()) {
-                    swaggerUiConfigParameters.addGroup(serviceName)
-                    swaggerUiConfigParameters.addUrl(openApiUrl)
+                    GroupedOpenApi.builder()
+                        .group(serviceName)
+                        .pathsToMatch("/$openApiUrl")
+                        .displayName("OpenAPI for $serviceName")
+                        .build()
+                    println("Registered Swagger Group: $serviceName with URL: $openApiUrl")
                 }
             }
         }
