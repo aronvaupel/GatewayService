@@ -30,7 +30,7 @@ class SuperAdminCreationInterceptor(
         val wrappedRequest = request as? ContentCachingRequestWrapper
             ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
         val createRequest = try {
-            val requestBody = wrappedRequest.inputStream.bufferedReader().use { it.readText() }
+            val requestBody = String(wrappedRequest.contentAsByteArray)
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
             log.error { "Error parsing request body: ${e.message}" }
