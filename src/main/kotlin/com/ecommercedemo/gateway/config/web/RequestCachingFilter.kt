@@ -1,19 +1,23 @@
 package com.ecommercedemo.gateway.config.web
 
-import jakarta.servlet.Filter
 import jakarta.servlet.FilterChain
-import jakarta.servlet.ServletRequest
-import jakarta.servlet.ServletResponse
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.web.filter.OncePerRequestFilter
 import org.springframework.web.util.ContentCachingRequestWrapper
 
-class RequestCachingFilter : Filter {
-    override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
-        if (request is HttpServletRequest) {
-            val wrappedRequest = ContentCachingRequestWrapper(request)
-            chain.doFilter(wrappedRequest, response)
+class RequestCachingFilter : OncePerRequestFilter() {
+    override fun doFilterInternal(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        filterChain: FilterChain
+    ) {
+        val wrappedRequest = if (request is ContentCachingRequestWrapper) {
+            request
         } else {
-            chain.doFilter(request, response)
+            ContentCachingRequestWrapper(request)
         }
+
+        filterChain.doFilter(wrappedRequest, response)
     }
 }
