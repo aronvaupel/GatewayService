@@ -14,7 +14,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class RateLimitingInterceptor @Autowired constructor(
+class RateLimitingConfig @Autowired constructor(
     private val rateLimitResolver: RateLimitResolver,
     private val redisTemplate: RedisTemplate<String, String>,
     private val jwtUtil: JwtUtil,
