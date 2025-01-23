@@ -13,6 +13,11 @@ class RequestCachingFilter : OncePerRequestFilter() {
         filterChain: FilterChain
     ) {
         println("REQUEST CACHING FILTER triggered")
+        if (request.requestURI.startsWith("/auth")) {
+            println("Detected request for AuthController: skipping request caching")
+            filterChain.doFilter(request, response)
+            return
+        }
         val wrappedRequest = if (request is ContentCachingRequestWrapper) {
             request
         } else {
