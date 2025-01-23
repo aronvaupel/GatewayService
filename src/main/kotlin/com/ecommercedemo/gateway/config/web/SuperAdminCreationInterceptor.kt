@@ -28,6 +28,7 @@ class SuperAdminCreationInterceptor(
         println("SUPER ADMIN CREATION INTERCEPTOR triggered")
         val wrappedRequest = request as? ContentCachingRequestWrapper
             ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
+        println("Wrapped request: $wrappedRequest")
         val createRequest = try {
             val requestBody = String(wrappedRequest.contentAsByteArray)
             println("Request body: $requestBody")
