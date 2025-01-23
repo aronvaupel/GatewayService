@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 import mu.KotlinLogging
-
+import org.springframework.web.util.ContentCachingRequestWrapper
 
 @Component
 class SuperAdminCreationInterceptor(
@@ -27,8 +27,10 @@ class SuperAdminCreationInterceptor(
         handler: Any
     ): Boolean {
         println("SUPER ADMIN CREATION INTERCEPTOR triggered")
+        val wrappedRequest = request as? ContentCachingRequestWrapper
+            ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
         val createRequest = try {
-            val requestBody = request.inputStream.bufferedReader().use { it.readText() }
+            val requestBody = wrappedRequest.inputStream.bufferedReader().use { it.readText() }
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
             log.error { "Error parsing request body: ${e.message}" }

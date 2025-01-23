@@ -23,7 +23,7 @@ class InterceptorConfig : WebMvcConfigurer {
             .excludePathPatterns("/auth/**")
         registry.addInterceptor(rateLimitingInterceptor)
             .excludePathPatterns("/auth/**")
-//        registry.addInterceptor(superAdminInterceptor)
-//            .excludePathPatterns("/auth/**")
+        registry.addInterceptor(superAdminInterceptor)
+            .excludePathPatterns("/auth/**")
     }
 }
