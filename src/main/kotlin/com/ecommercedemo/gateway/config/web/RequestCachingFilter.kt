@@ -12,12 +12,14 @@ class RequestCachingFilter : OncePerRequestFilter() {
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
+        println("REQUEST CACHING FILTER triggered")
         val wrappedRequest = if (request is ContentCachingRequestWrapper) {
             request
         } else {
             ContentCachingRequestWrapper(request)
         }
         wrappedRequest.inputStream.bufferedReader().use { it.readText() }
+        println("Request body: ${String(wrappedRequest.contentAsByteArray)}")
         filterChain.doFilter(wrappedRequest, response)
     }
 }
