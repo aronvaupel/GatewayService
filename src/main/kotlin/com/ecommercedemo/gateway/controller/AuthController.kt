@@ -23,6 +23,7 @@ class AuthController(
         @RequestBody authRequest: AuthRequest,
         response: HttpServletResponse
     ): AuthResponse {
+        println("Calling auth-service to authenticate")
         val (accessToken, refreshToken, userId) = authService.authenticate(authRequest.username, authRequest.password)
         response.addCookie(authService.createRefreshCookie(refreshToken))
         activityTracker.updateLastActivity(userId, System.currentTimeMillis())
