@@ -31,7 +31,9 @@ class SuperAdminCreationInterceptor(
         println("Wrapped request: $wrappedRequest")
         val createRequest = try {
             val requestBody = String(wrappedRequest.contentAsByteArray)
-            println("Request body: $requestBody")
+            println("Wrapped request details:")
+            println("Headers: ${wrappedRequest.headerNames.toList().joinToString { "$it: ${wrappedRequest.getHeader(it)}" }}")
+            println("Body: $requestBody")
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
             log.error { "Error parsing request body: ${e.message}" }
