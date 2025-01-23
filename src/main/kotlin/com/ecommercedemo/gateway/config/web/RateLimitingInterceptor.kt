@@ -14,7 +14,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 @Configuration
-class RateLimitingConfig @Autowired constructor(
+class RateLimitingInterceptor @Autowired constructor(
     private val rateLimitResolver: RateLimitResolver,
     private val redisTemplate: RedisTemplate<String, String>,
     private val jwtUtil: JwtUtil,
@@ -24,6 +24,7 @@ class RateLimitingConfig @Autowired constructor(
     fun rateLimitingInterceptor(): HandlerInterceptor {
         return object : HandlerInterceptor {
             override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+                println("RATE LIMITING INTERCEPTOR triggered")
                 val token = request.getHeader("Authorization")?.substringAfter("Bearer ")
                 val role = token?.let { jwtUtil.getRoleFromToken(it) } ?: "guest"
                 val (replenishRate, burstCapacity) = rateLimitResolver.resolveRateLimiter(

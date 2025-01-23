@@ -26,6 +26,7 @@ class SuperAdminCreationInterceptor(
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
+        println("SUPER ADMIN CREATION INTERCEPTOR triggered")
         val createRequest = try {
             val requestBody = request.inputStream.bufferedReader().use { it.readText() }
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
@@ -40,7 +41,7 @@ class SuperAdminCreationInterceptor(
                 val authentication = SecurityContextHolder.getContext().authentication
                 val creatorRole = extractRoleFromToken(authentication.credentials.toString())
                 val superAdminCount = _userRestService.getSuperAdminCount()
-
+                println("Super admin count: $superAdminCount")
                 when {
                     superAdminCount == 0 -> return true
                     superAdminCount >= 3 -> return false

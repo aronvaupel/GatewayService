@@ -15,10 +15,15 @@ class InterceptorConfig : WebMvcConfigurer {
     @Autowired
     private lateinit var rateLimitingInterceptor: HandlerInterceptor
 
+    @Autowired
+    private lateinit var superAdminInterceptor: SuperAdminCreationInterceptor
+
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(activityInterceptor)
-            .excludePathPatterns("/auth/**")
+            .excludePathPatterns("/*/**")
         registry.addInterceptor(rateLimitingInterceptor)
-            .excludePathPatterns("/auth/**")
+            .excludePathPatterns("/*/**")
+        registry.addInterceptor(superAdminInterceptor)
+            .addPathPatterns("/*/**")
     }
 }

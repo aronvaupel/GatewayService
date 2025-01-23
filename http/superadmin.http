@@ -20,7 +20,7 @@ Content-Type: application/json
 {
   "entityClassName": "User",
   "properties": {
-    "username": "firstSuperAdmin",
+    "username": "secondSuperAdmin",
     "userRole": "SUPER_ADMIN",
     "password": "SuperSecurePassword123!"
   }
@@ -34,7 +34,7 @@ Content-Type: application/json
 {
   "entityClassName": "User",
   "properties": {
-    "username": "firstSuperAdmin",
+    "username": "thirdSuperAdmin",
     "userRole": "SUPER_ADMIN",
     "password": "SuperSecurePassword123!"
   }
@@ -48,7 +48,7 @@ Content-Type: application/json
 {
   "entityClassName": "User",
   "properties": {
-    "username": "firstSuperAdmin",
+    "username": "fourthSuperAdmin",
     "userRole": "SUPER_ADMIN",
     "password": "SuperSecurePassword123!"
   }

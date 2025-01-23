@@ -19,6 +19,7 @@ class ActivityInterceptor(
 
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+        println("ACTIVITY INTERCEPTOR triggered")
         val userId = request.getHeader("userId")
         if (userId != null) {
             activityTracker.updateLastActivity(UUID.fromString(userId), System.currentTimeMillis())
@@ -29,9 +30,8 @@ class ActivityInterceptor(
     private fun scheduleLogout(userId: UUID) {
         scheduler.schedule({
             val lastActivity = activityTracker.getLastActivity(userId)
-            if (lastActivity != null && lastActivity.plusMinutes(15).isBefore(LocalDateTime.now())) {
+            if (lastActivity != null && lastActivity.plusMinutes(2).isBefore(LocalDateTime.now())) {
                 println("Automatically logging out user with ID: $userId due to inactivity")
-                // You can add logic to invalidate tokens or remove session if necessary
             }
         }, 15, TimeUnit.MINUTES)
     }
