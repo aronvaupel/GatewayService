@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse
 import mu.KotlinLogging
 import org.springframework.cloud.client.discovery.DiscoveryClient
 import org.springframework.stereotype.Service
+import org.springframework.web.util.ContentCachingRequestWrapper
 import java.net.HttpURLConnection
 import java.net.URI
 import java.util.*
@@ -111,6 +112,11 @@ class RequestForwardingService(
         response: HttpServletResponse,
         targetUrl: String
     ) {
+        val wrappedRequest = request as? ContentCachingRequestWrapper
+            ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
+
+
+
         val connection = URI(targetUrl).toURL().openConnection() as HttpURLConnection
         connection.requestMethod = request.method
         connection.doOutput = true
@@ -118,7 +124,8 @@ class RequestForwardingService(
             connection.setRequestProperty(header, request.getHeader(header))
         }
         if (request.method in listOf("POST", "PUT", "PATCH")) {
-            connection.outputStream.use { request.inputStream.copyTo(it) }
+            val cachedBody = String(wrappedRequest.contentAsByteArray)
+            connection.outputStream.use { it.write(cachedBody.toByteArray()) }
         }
         response.status = connection.responseCode
         connection.inputStream.use { it.copyTo(response.outputStream) }
