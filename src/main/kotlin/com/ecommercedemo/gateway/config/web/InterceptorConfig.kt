@@ -20,10 +20,10 @@ class InterceptorConfig : WebMvcConfigurer {
 
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(activityInterceptor)
-            .excludePathPatterns("/*/**")
+            .excludePathPatterns("/auth/**")
         registry.addInterceptor(rateLimitingInterceptor)
-            .excludePathPatterns("/*/**")
+            .excludePathPatterns("/auth/**")
         registry.addInterceptor(superAdminInterceptor)
-            .addPathPatterns("/*/**")
+            .excludePathPatterns("/auth/**")
     }
 }
