@@ -37,6 +37,7 @@ class AuthService(
     }
 
     fun refreshToken(refreshToken: String): Pair<String, String?> {
+        println("Starting token refresh")
         if (!jwtUtil.validateToken(refreshToken)) {
             throw AuthenticationFailureException()
         }

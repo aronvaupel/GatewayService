@@ -32,6 +32,7 @@ class AuthController(
     @Operation(summary = "Refresh authentication tokens.")
     @PostMapping("/refresh")
     fun refresh(@CookieValue("refreshToken") refreshToken: String, response: HttpServletResponse): AuthResponse {
+        println("Calling auth-service to refresh token")
         val (newAccessToken, updatedRefreshToken) = authService.refreshToken(refreshToken)
         if (updatedRefreshToken != null) {
             response.addCookie(authService.createRefreshCookie(updatedRefreshToken))
