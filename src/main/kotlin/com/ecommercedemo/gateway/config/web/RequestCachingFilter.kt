@@ -17,7 +17,7 @@ class RequestCachingFilter : OncePerRequestFilter() {
         } else {
             ContentCachingRequestWrapper(request)
         }
-
+        wrappedRequest.inputStream.bufferedReader().use { it.readText() }
         filterChain.doFilter(wrappedRequest, response)
     }
 }
