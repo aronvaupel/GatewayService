@@ -38,8 +38,9 @@ class SuperAdminCreationInterceptor(
         if (createRequest?.entityClassName != "User") return true
         else {
             if (createRequest.properties["userRole"] == "SUPER_ADMIN") {
-                val authentication = SecurityContextHolder.getContext().authentication
-                val creatorRole = extractRoleFromToken(authentication.credentials.toString())
+                val authHeader = request.getHeader("Authorization")
+                val token = authHeader.removePrefix("Bearer ").trim()
+                val creatorRole = extractRoleFromToken(token)
                 val superAdminCount = _userRestService.getSuperAdminCount()
                 println("Super admin count: $superAdminCount")
                 when {
@@ -54,7 +55,9 @@ class SuperAdminCreationInterceptor(
 
     private fun extractRoleFromToken(token: String): String {
         val claims = jwtUtil.getClaimsFromToken(token)
-        return claims["role"] as? String
+        val result = claims["role"] as? String
+        println("Role extracted from token: $result")
+        return result
           ?: throw AuthenticationFailureException()
     }
 }
