@@ -12,6 +12,11 @@ Content-Type: application/json
   }
 }
 
+> {%
+    console.log(request.headers);
+    console.log(response.body);
+%}
+
 ### Create second Super Admin
 POST {{baseUrl}}/user-service/users
 Authorization: Bearer {{token}}
@@ -25,6 +30,11 @@ Content-Type: application/json
     "password": "SuperSecurePassword123!"
   }
 }
+
+> {%
+    console.log(request.headers);
+    console.log(response.body);
+%}
 
 ### Create third Super Admin
 POST {{baseUrl}}/user-service/users
