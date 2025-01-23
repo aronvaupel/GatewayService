@@ -7,10 +7,9 @@ import com.ecommercedemo.gateway.service._UserRestService
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.security.core.context.SecurityContextHolder
+import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
-import mu.KotlinLogging
 import org.springframework.web.util.ContentCachingRequestWrapper
 
 @Component
@@ -31,6 +30,7 @@ class SuperAdminCreationInterceptor(
             ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
         val createRequest = try {
             val requestBody = String(wrappedRequest.contentAsByteArray)
+            println("Request body: $requestBody")
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
             log.error { "Error parsing request body: ${e.message}" }
