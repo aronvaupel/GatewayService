@@ -50,8 +50,15 @@ class SuperAdminCreationInterceptor(
                 println("Super admin count: $superAdminCount")
                 when {
                     superAdminCount == 0 -> return true
-                    superAdminCount >= 3 -> return false
-                    superAdminCount in 1..2 && creatorRole != "SUPER_ADMIN" -> return false
+                    superAdminCount >= 3 ->{
+                        log.error { "Super admin count exceeded" }
+                        return false
+                    }
+                    superAdminCount in 1..2 && creatorRole != "SUPER_ADMIN" -> {
+                        log.error { "Only super admin can create super admin" }
+                        return false
+                    }
+
                 }
             }
         }
