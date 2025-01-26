@@ -25,15 +25,10 @@ class SuperAdminCreationInterceptor(
         response: HttpServletResponse,
         handler: Any
     ): Boolean {
-        println("SUPER ADMIN CREATION INTERCEPTOR triggered")
         val wrappedRequest = request as? ContentCachingRequestWrapper
             ?: throw IllegalStateException("Request must be wrapped with ContentCachingRequestWrapper")
-        println("Wrapped request: $wrappedRequest")
         val createRequest = try {
             val requestBody = String(wrappedRequest.contentAsByteArray)
-            println("Wrapped request details:")
-            println("Headers: ${wrappedRequest.headerNames.toList().joinToString { "$it: ${wrappedRequest.getHeader(it)}" }}")
-            println("Body: $requestBody")
             ObjectMapper().readValue(requestBody, CreateRequest::class.java)
         } catch (e: Exception) {
             log.error { "Error parsing request body: ${e.message}" }
@@ -47,7 +42,6 @@ class SuperAdminCreationInterceptor(
                 val token = authHeader.removePrefix("Bearer ").trim()
                 val creatorRole = extractRoleFromToken(token)
                 val superAdminCount = _userRestService.getSuperAdminCount()
-                println("Super admin count: $superAdminCount")
                 when {
                     superAdminCount == 0 -> return true
                     superAdminCount >= 3 ->{

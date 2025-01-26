@@ -54,6 +54,7 @@ extra["springCloudVersion"] = "2023.0.3"
 dependencies {
 	implementation("com.github.aronvaupel:commons:7.4.11")
 	implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.9.0")
+	testImplementation("org.assertj:assertj-core:3.27.2")
 	implementation("org.hibernate:hibernate-core:6.6.3.Final")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-security")

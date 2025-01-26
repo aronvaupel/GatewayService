@@ -1,7 +1,5 @@
 package com.ecommercedemo.gateway.service
 
-import org.springframework.context.annotation.DependsOn
-import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Service
 import java.time.Instant
